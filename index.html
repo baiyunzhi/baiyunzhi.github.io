@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小院 — 一方庭院，四季光阴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #faf7f2;
+    --paper-dark: #f0ebe0;
+    --ink: #2c2416;
+    --ink-light: #5c5240;
+    --ink-lighter: #8a7e6c;
+    --vermillion: #c43a31;
+    --vermillion-dark: #a33028;
+    --vermillion-light: #e8a09b;
+    --jade: #5b8c6f;
+    --jade-dark: #3d6b52;
+    --jade-light: #a8c9b5;
+    --jade-pale: #e0efe5;
+    --gold: #b8a57a;
+    --gold-light: #d4c9a8;
+    --bamboo: #7d9b4e;
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2.5rem;
+    --space-xl: 4rem;
+    --space-2xl: 7rem;
+    --max-width: 1200px;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+    --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: var(--paper);
+    color: var(--ink);
+    line-height: 1.8;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Grain Texture Overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* ── Typography ── */
+  h1, h2, h3, .serif {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .calligraphy {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-weight: 400;
+  }
+
+  /* ── Navigation ── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background var(--transition), padding var(--transition);
+  }
+
+  .nav.scrolled {
+    background: rgba(250, 247, 242, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 0.75rem 2rem;
+    box-shadow: 0 1px 0 rgba(44, 36, 22, 0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.8rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .nav-logo:hover { color: var(--vermillion); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--ink-light);
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    transition: color var(--transition);
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--vermillion);
+    transition: width var(--transition);
+  }
+
+  .nav-links a:hover { color: var(--vermillion); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--ink);
+    transition: var(--transition);
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 6rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  /* Moon Gate */
+  .moon-gate {
+    position: relative;
+    width: min(520px, 85vw);
+    height: min(520px, 85vw);
+    border-radius: 50%;
+    border: 2px solid var(--gold-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem;
+    animation: moonFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+      0 0 0 1px rgba(184, 165, 122, 0.15),
+      0 0 120px rgba(184, 165, 122, 0.08);
+    background: radial-gradient(circle at 50% 50%, rgba(250,247,242,0.5) 0%, rgba(250,247,242,0.9) 100%);
+  }
+
+  .moon-gate::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 1px solid rgba(184, 165, 122, 0.2);
+    animation: moonPulse 4s ease-in-out infinite;
+  }
+
+  .moon-gate::after {
+    content: '';
+    position: absolute;
+    inset: -28px;
+    border-radius: 50%;
+    border: 1px dashed rgba(184, 165, 122, 0.12);
+  }
+
+  @keyframes moonFadeIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes moonPulse {
+    0%, 100% { transform: scale(1); opacity: 0.2; }
+    50% { transform: scale(1.015); opacity: 0.4; }
+  }
+
+  .hero-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--vermillion);
+    text-transform: uppercase;
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(3.5rem, 8vw, 5.5rem);
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: var(--space-xs);
+    font-weight: 400;
+  }
+
+  .hero-subtitle {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: var(--ink-lighter);
+    letter-spacing: 0.12em;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-line {
+    width: 40px;
+    height: 1px;
+    background: var(--vermillion);
+    margin: 0 auto var(--space-md);
+  }
+
+  .hero-desc {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    max-width: 280px;
+    line-height: 2;
+  }
+
+  /* Floating petals */
+  .petals {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .petal {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    background: var(--vermillion-light);
+    border-radius: 50% 0 50% 0;
+    opacity: 0;
+    animation: petalFall linear infinite;
+  }
+
+  @keyframes petalFall {
+    0% {
+      opacity: 0;
+      transform: translate(0, -10vh) rotate(0deg) scale(0.8);
+    }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% {
+      opacity: 0;
+      transform: translate(30px, 110vh) rotate(720deg) scale(0.2);
+    }
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeInUp 1s 1.5s both;
+  }
+
+  .scroll-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: scrollDot 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollDot {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(8px); }
+  }
+
+  /* ── Section Common ── */
+  .section {
+    padding: var(--space-2xl) 2rem;
+    position: relative;
+  }
+
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--vermillion);
+    text-transform: uppercase;
+    margin-bottom: var(--space-sm);
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    color: var(--ink);
+    margin-bottom: var(--space-md);
+    line-height: 1.3;
+  }
+
+  .section-text {
+    color: var(--ink-light);
+    font-size: 0.95rem;
+    max-width: 600px;
+    line-height: 2;
+  }
+
+  /* ── Philosophy ── */
+  .philosophy {
+    background: var(--paper-dark);
+  }
+
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .philosophy-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  /* Window Lattice Pattern */
+  .lattice {
+    width: 300px;
+    height: 300px;
+    position: relative;
+  }
+
+  .lattice-inner {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--gold);
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 2px;
+  }
+
+  .lattice-cell {
+    border: 1px solid rgba(184, 165, 122, 0.3);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lattice-cell::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: var(--jade);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+  }
+
+  .lattice-cell.visible::before {
+    opacity: 0.6;
+    animation: latticeGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes latticeGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+
+  .lattice-corner-top-left,
+  .lattice-corner-top-right,
+  .lattice-corner-bottom-left,
+  .lattice-corner-bottom-right {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+  }
+
+  .lattice-corner-top-left { top: -6px; left: -6px; border-width: 2px 0 0 2px; }
+  .lattice-corner-top-right { top: -6px; right: -6px; border-width: 2px 2px 0 0; }
+  .lattice-corner-bottom-left { bottom: -6px; left: -6px; border-width: 0 0 2px 2px; }
+  .lattice-corner-bottom-right { bottom: -6px; right: -6px; border-width: 0 2px 2px 0; }
+
+  .philosophy-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .philosophy-item {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
+
+  .philosophy-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    background: var(--jade-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--jade-dark);
+  }
+
+  .philosophy-item h3 {
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+
+  .philosophy-item p {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+
+  /* ── Spaces ── */
+  .spaces-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+  }
+
+  .space-card {
+    background: var(--paper);
+    border: 1px solid rgba(184, 165, 122, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    transition: all var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .space-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--jade), var(--gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
+  }
+
+  .space-card:hover::before { transform: scaleX(1); }
+
+  .space-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 20px 60px rgba(44, 36, 22, 0.06);
+    transform: translateY(-4px);
+  }
+
+  .space-card-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .space-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-xs);
+    color: var(--ink);
+  }
+
+  .space-card p {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+
+  .space-card-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--vermillion);
+    margin-top: var(--space-sm);
+  }
+
+  /* ── Moments Gallery ── */
+  .moments {
+    background: var(--paper-dark);
+  }
+
+  .moments-scroll {
+    display: flex;
+    gap: var(--space-md);
+    overflow-x: auto;
+    padding: var(--space-lg) 0;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .moments-scroll::-webkit-scrollbar { display: none; }
+
+  .moment-card {
+    min-width: 280px;
+    max-width: 320px;
+    scroll-snap-align: start;
+    background: var(--paper);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: var(--transition);
+    cursor: pointer;
+    border: 1px solid rgba(184, 165, 122, 0.15);
+  }
+
+  .moment-card:hover {
+    box-shadow: 0 16px 48px rgba(44, 36, 22, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .moment-image {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .moment-image .img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+  }
+
+  .moment-card:nth-child(1) .img-placeholder { background: linear-gradient(135deg, #e8efe4, #d4e0d0); }
+  .moment-card:nth-child(2) .img-placeholder { background: linear-gradient(135deg, #efe8dc, #e0d8c8); }
+  .moment-card:nth-child(3) .img-placeholder { background: linear-gradient(135deg, #e8e8ef, #d5d5e0); }
+  .moment-card:nth-child(4) .img-placeholder { background: linear-gradient(135deg, #efe4e4, #e0d5d5); }
+  .moment-card:nth-child(5) .img-placeholder { background: linear-gradient(135deg, #e4efe8, #d0e0d8); }
+
+  .moment-info {
+    padding: var(--space-md);
+  }
+
+  .moment-info h4 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+
+  .moment-info p {
+    font-size: 0.8rem;
+    color: var(--ink-lighter);
+  }
+
+  /* ── Visit ── */
+  .visit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .visit-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .visit-item {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+
+  .visit-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    background: var(--jade-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--jade-dark);
+    font-size: 1rem;
+  }
+
+  .visit-item h4 {
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+
+  .visit-item p {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+  }
+
+  /* Seal Mark */
+  .seal {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--vermillion);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vermillion);
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.4rem;
+    transform: rotate(-3deg);
+    opacity: 0.85;
+    margin-top: var(--space-lg);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    border-top: 1px solid rgba(184, 165, 122, 0.2);
+    padding: var(--space-xl) 2rem var(--space-lg);
+    text-align: center;
+  }
+
+  .footer p {
+    font-size: 0.8rem;
+    color: var(--ink-lighter);
+    letter-spacing: 0.06em;
+  }
+
+  .footer .footer-logo {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: var(--space-sm);
+  }
+
+  /* ── Reveal Animations ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* ── Ink Brush Divider ── */
+  .ink-divider {
+    width: 120px;
+    height: 2px;
+    margin: var(--space-lg) 0;
+    position: relative;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .ink-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: var(--vermillion);
+    border-radius: 50%;
+  }
+
+  /* ── Vertical Text (desktop) ── */
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.85rem;
+    color: var(--ink-lighter);
+    letter-spacing: 0.2em;
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .vertical-text { display: block; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+
+    .nav.open .nav-links {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(250, 247, 242, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem 2rem;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(184, 165, 122, 0.15);
+    }
+
+    .philosophy-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .philosophy-visual { min-height: 250px; }
+    .lattice { width: 220px; height: 220px; }
+
+    .spaces-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .visit-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero { padding: 5rem 1rem 3rem; }
+    .section { padding: var(--space-xl) 1rem; }
+
+    .moon-gate {
+      width: min(380px, 80vw);
+      height: min(380px, 80vw);
+      padding: 2rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .moon-gate {
+      width: 90vw;
+      height: 90vw;
+      padding: 1.5rem;
+    }
+    .hero-title { font-size: 2.8rem; }
+  }
+
+  /* ── Reduced Motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ══════ 棋牌室 Poker Room ══════ */
+  .poker-frame {
+    border: 2px solid var(--gold-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(44, 36, 22, 0.08);
+    position: relative;
+    background: var(--paper);
+  }
+  .poker-frame::before,
+  .poker-frame::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    border-color: var(--jade);
+    border-style: solid;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .poker-frame::before { top: -2px; left: -2px; border-width: 2px 0 0 2px; border-radius: 4px 0 0 0; }
+  .poker-frame::after { bottom: -2px; right: -2px; border-width: 0 2px 2px 0; border-radius: 0 0 4px 0; }
+  .poker-frame iframe {
+    width: 100%;
+    height: 820px;
+    min-height: 600px;
+    border: none;
+    display: block;
+  }
+
+  /* ══════ 算盘阁 Abacus Calculator ══════ */
+  .abacus-frame {
+    max-width: 380px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #f5efe0 0%, #ede4d0 100%);
+    border: 2px solid var(--gold-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow:
+      0 8px 32px rgba(44, 36, 22, 0.08),
+      inset 0 2px 4px rgba(255, 255, 255, 0.6);
+    position: relative;
+  }
+  .abacus-frame::before,
+  .abacus-frame::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--jade);
+    border-style: solid;
+    pointer-events: none;
+  }
+  .abacus-frame::before { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+  .abacus-frame::after { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+  .abacus-display {
+    background: var(--paper);
+    border: 1px solid rgba(184, 165, 122, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    text-align: right;
+    margin-bottom: 1.25rem;
+    min-height: 5rem;
+    font-family: 'Noto Serif TC', serif;
+    overflow-x: auto;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+  .abacus-expression {
+    font-size: 0.85rem;
+    color: var(--ink-lighter);
+    min-height: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .abacus-result {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .abacus-keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+  }
+  .abacus-key {
+    padding: 0.85rem 0;
+    font-size: 1.05rem;
+    font-family: 'Noto Serif TC', serif;
+    border: 1px solid rgba(184, 165, 122, 0.2);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all var(--transition);
+    user-select: none;
+    position: relative;
+    letter-spacing: 0.04em;
+  }
+  .abacus-key:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+    background: var(--paper-dark);
+  }
+  .abacus-key:hover {
+    border-color: var(--gold);
+    box-shadow: 0 2px 8px rgba(184, 165, 122, 0.15);
+  }
+  .abacus-key--number { font-weight: 600; }
+  .abacus-key--number:hover { background: var(--jade-pale); }
+  .abacus-key--operator { color: var(--vermillion); font-weight: 600; }
+  .abacus-key--operator:hover { background: rgba(196, 58, 49, 0.06); }
+  .abacus-key--equals {
+    background: var(--gold);
+    color: #fff;
+    border-color: var(--gold);
+    font-weight: 700;
+  }
+  .abacus-key--equals:hover { background: #a8945a; border-color: #a8945a; }
+  .abacus-key--clear { color: var(--vermillion); font-weight: 600; }
+  .abacus-key--clear:hover { background: rgba(196, 58, 49, 0.08); }
+  .abacus-rods {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(184, 165, 122, 0.15);
+  }
+  .abacus-rod {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .abacus-bead {
+    width: 18px; height: 10px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #d4c9a8 0%, #b8a57a 100%);
+    border: 1px solid rgba(184, 165, 122, 0.4);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+
+  /* ══════ 书房 Naval Quotes ══════ */
+  .naval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-md);
+  }
+  .naval-card {
+    background: var(--paper);
+    border: 1px solid rgba(184, 165, 122, 0.15);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .naval-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--vermillion);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--transition);
+  }
+  .naval-card:hover::before { transform: scaleY(1); }
+  .naval-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 8px 32px rgba(44, 36, 22, 0.06);
+    transform: translateY(-2px);
+  }
+  .naval-theme {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--vermillion);
+    text-transform: uppercase;
+    margin-bottom: var(--space-sm);
+  }
+  .naval-quote-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.05rem;
+    color: var(--ink);
+    line-height: 1.9;
+    margin-bottom: var(--space-sm);
+    font-weight: 500;
+  }
+  .naval-quote-en {
+    font-size: 0.85rem;
+    color: var(--ink-lighter);
+    font-style: italic;
+    line-height: 1.7;
+    border-top: 1px dashed rgba(184, 165, 122, 0.2);
+    padding-top: var(--space-sm);
+  }
+  .naval-chapter {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-md) 0;
+  }
+  .naval-chapter h3 {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.6rem;
+    color: var(--vermillion);
+    letter-spacing: 0.08em;
+    font-weight: 400;
+  }
+
+  /* ── Responsive additions ── */
+  @media (max-width: 768px) {
+    .poker-frame iframe { height: 700px; min-height: 480px; }
+    .naval-grid { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 769px) {
+    .spaces-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">小院</a>
+  <button class="nav-toggle" id="navToggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#philosophy">小院哲学</a></li>
+    <li><a href="#spaces">庭院空间</a></li>
+    <li><a href="#poker-room">棋牌室</a></li>
+    <li><a href="#calculator">算盘阁</a></li>
+    <li><a href="#study">书房</a></li>
+    <li><a href="#moments">四时景致</a></li>
+    <li><a href="#visit">来访指引</a></li>
+  </ul>
+</nav>
+
+<!-- Vertical Accent -->
+<div class="vertical-text">一方庭院&ensp;四季光阴</div>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="petals" id="petals" aria-hidden="true"></div>
+
+  <div class="moon-gate">
+    <div class="hero-tag">Courtyard · Since 2024</div>
+    <h1 class="hero-title">小院</h1>
+    <div class="hero-line"></div>
+    <p class="hero-subtitle">一方庭院&ensp;·&ensp;四季光阴</p>
+    <p class="hero-desc">
+      庭院深深，花木扶疏。石阶苔痕，竹影摇风。于此间，寻一份静谧，品一盏清茶，观云卷云舒。
+    </p>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- Philosophy -->
+<section class="section philosophy" id="philosophy">
+  <div class="section-inner philosophy-grid">
+    <div class="philosophy-visual reveal">
+      <div class="lattice">
+        <div class="lattice-corner-top-left"></div>
+        <div class="lattice-corner-top-right"></div>
+        <div class="lattice-corner-bottom-left"></div>
+        <div class="lattice-corner-bottom-right"></div>
+        <div class="lattice-inner" id="latticeGrid">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label reveal">Philosophy</div>
+      <h2 class="section-title reveal reveal-delay-1">庭院深深，<br>心之所向</h2>
+      <div class="ink-divider reveal reveal-delay-2"></div>
+      <p class="section-text reveal reveal-delay-2">
+        小院，不只是一方空间，更是一种生活态度。我们相信，在忙碌的都市生活中，每个人心中都该有一座庭院——种花、品茶、读书、会友，让时间慢下来，感受四季流转的温度。
+      </p>
+      <ul class="philosophy-list" style="margin-top: var(--space-lg);">
+        <li class="philosophy-item reveal reveal-delay-3">
+          <div class="philosophy-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9"/><path d="M12 3c4.97 0 9 4.03 9 9"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div>
+            <h3>自然而然</h3>
+            <p>遵循四季节律，春生夏长，秋收冬藏。院中草木顺天时而动，人也回归本真节奏。</p>
+          </div>
+        </li>
+        <li class="philosophy-item reveal reveal-delay-4">
+          <div class="philosophy-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg>
+          </div>
+          <div>
+            <h3>静心品茗</h3>
+            <p>一壶清茶，半日闲情。在茶香氤氲中，放下纷扰，与自己对话，与友人谈心。</p>
+          </div>
+        </li>
+        <li class="philosophy-item reveal reveal-delay-5">
+          <div class="philosophy-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <h3>慢下来</h3>
+            <p>没有KPI，没有deadline。只有花开花落，云卷云舒。在这里，时间以另一种方式流淌。</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Spaces -->
+<section class="section" id="spaces">
+  <div class="section-inner">
+    <div class="section-label reveal">Spaces</div>
+    <h2 class="section-title reveal reveal-delay-1">院中天地</h2>
+    <p class="section-text reveal reveal-delay-1">
+      小院虽小，五脏俱全。每一个角落，都经过精心设计，承载着不同的生活意趣。
+    </p>
+    <div class="spaces-grid">
+      <div class="space-card reveal reveal-delay-2">
+        <div class="space-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 12 6 12s6-8 6-12a6 6 0 0 0-6-6z"/><circle cx="12" cy="9" r="2"/></svg>
+        </div>
+        <h3>茶室</h3>
+        <p>一方茶席，几把竹椅。炭火慢煮，茶香四溢。窗外的竹影投在素白的墙上，随着日光缓缓移动。</p>
+        <span class="space-card-tag">品茗 · 冥想</span>
+      </div>
+      <div class="space-card reveal reveal-delay-3">
+        <div class="space-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22c1.5-4 5-8 10-8s8.5 4 10 8"/><path d="M7 10c0-3 2-6 5-6s5 3 5 6"/><path d="M9 7h6"/></svg>
+        </div>
+        <h3>花圃</h3>
+        <p>四季花开不断——春天的海棠，夏日的荷花，秋天的菊花，冬日的腊梅。每一季都有不同的色彩与芬芳。</p>
+        <span class="space-card-tag">园艺 · 自然</span>
+      </div>
+      <div class="space-card reveal reveal-delay-4" onclick="document.querySelector('#study').scrollIntoView({behavior:'smooth'})">
+        <div class="space-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </div>
+        <h3>书房</h3>
+        <p>满墙的书架，临窗的书桌。晴天有阳光洒落，雨天听雨打芭蕉。一卷在手，便是最好的时光。</p>
+        <span class="space-card-tag">阅读 · 创作 · 纳瓦尔</span>
+      </div>
+      <div class="space-card reveal reveal-delay-5" onclick="document.querySelector('#poker-room').scrollIntoView({behavior:'smooth'})">
+        <div class="space-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--jade)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h6l-5 4 2 7-6-4-6 4 2-7-5-4h6z"/></svg>
+        </div>
+        <h3>棋牌室</h3>
+        <p>与AI对弈德州扑克，训练起手牌范围，计算实时胜率。方寸之间，运筹帷幄。</p>
+        <span class="space-card-tag">博弈 · 策略</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Poker Room -->
+<section class="section" id="poker-room">
+  <div class="section-inner">
+    <div class="section-label reveal">Games</div>
+    <h2 class="section-title reveal reveal-delay-1">棋牌室</h2>
+    <div class="ink-divider reveal reveal-delay-1"></div>
+    <p class="section-text reveal reveal-delay-1">
+      方寸牌桌，运筹帷幄。与五位AI对手切磋德州扑克，内含对战、实时胜率计算、起手牌范围训练与数据统计。一局之间，见策略，见心性。
+    </p>
+    <div class="poker-frame reveal reveal-delay-2" style="margin-top: var(--space-lg);">
+      <iframe src="http://localhost:8891/"
+              title="棋牌室 - 德州扑克"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Calculator -->
+<section class="section" id="calculator">
+  <div class="section-inner">
+    <div class="section-label reveal">Tools</div>
+    <h2 class="section-title reveal reveal-delay-1">算盘阁</h2>
+    <div class="ink-divider reveal reveal-delay-1"></div>
+    <p class="section-text reveal reveal-delay-1">
+      珠算之道，指尖乾坤。一上一，二上二，三下五去二，加减乘除皆在方寸之间。
+    </p>
+    <div class="abacus-frame reveal reveal-delay-2" style="margin-top: var(--space-lg);">
+      <div class="abacus-display">
+        <div class="abacus-expression" id="abacus-expression"></div>
+        <div class="abacus-result" id="abacus-result">0</div>
+      </div>
+      <div class="abacus-keypad">
+        <button class="abacus-key abacus-key--clear" data-action="clear">AC</button>
+        <button class="abacus-key" data-action="backspace">⌫</button>
+        <button class="abacus-key abacus-key--operator" data-action="operator" data-value="%">%</button>
+        <button class="abacus-key abacus-key--operator" data-action="operator" data-value="/">&divide;</button>
+
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="7">七</button>
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="8">八</button>
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="9">九</button>
+        <button class="abacus-key abacus-key--operator" data-action="operator" data-value="*">&times;</button>
+
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="4">四</button>
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="5">五</button>
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="6">六</button>
+        <button class="abacus-key abacus-key--operator" data-action="operator" data-value="-">&minus;</button>
+
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="1">一</button>
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="2">二</button>
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="3">三</button>
+        <button class="abacus-key abacus-key--operator" data-action="operator" data-value="+">+</button>
+
+        <button class="abacus-key abacus-key--number" data-action="digit" data-value="0" style="grid-column: span 2;">零</button>
+        <button class="abacus-key" data-action="decimal">.</button>
+        <button class="abacus-key abacus-key--equals" data-action="equals">=</button>
+      </div>
+      <div class="abacus-rods" aria-hidden="true" id="abacus-rods"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Study -->
+<section class="section" id="study">
+  <div class="section-inner">
+    <div class="section-label reveal">Reading</div>
+    <h2 class="section-title reveal reveal-delay-1">书房 · 纳瓦尔宝典</h2>
+    <div class="ink-divider reveal reveal-delay-1"></div>
+    <p class="section-text reveal reveal-delay-1">
+      《纳瓦尔宝典》汇集了硅谷思想家 Naval Ravikant 关于财富、幸福与人生的智慧箴言。择其精华，置于书房，常读常新。
+    </p>
+    <div class="naval-grid" id="naval-grid" style="margin-top: var(--space-xl);"></div>
+  </div>
+</section>
+
+<!-- Moments -->
+<section class="section moments" id="moments">
+  <div class="section-inner">
+    <div class="section-label reveal">Moments</div>
+    <h2 class="section-title reveal reveal-delay-1">四时景致</h2>
+    <p class="section-text reveal reveal-delay-1">
+      小院的每一刻都值得铭记。春有百花秋有月，夏有凉风冬有雪。
+    </p>
+    <div class="moments-scroll reveal reveal-delay-2">
+      <div class="moment-card">
+        <div class="moment-image">
+          <div class="img-placeholder" aria-label="春日海棠">🌸</div>
+        </div>
+        <div class="moment-info">
+          <h4>春日 · 海棠</h4>
+          <p>三月春风拂面，海棠花开满枝头，粉白相间，如云似霞。</p>
+        </div>
+      </div>
+      <div class="moment-card">
+        <div class="moment-image">
+          <div class="img-placeholder" aria-label="夏日荷花">🪷</div>
+        </div>
+        <div class="moment-info">
+          <h4>夏日 · 荷塘</h4>
+          <p>蝉鸣声中，荷花亭亭玉立。一池碧水，几尾锦鲤，清凉了整个夏天。</p>
+        </div>
+      </div>
+      <div class="moment-card">
+        <div class="moment-image">
+          <div class="img-placeholder" aria-label="秋日红叶">🍂</div>
+        </div>
+        <div class="moment-info">
+          <h4>秋日 · 红叶</h4>
+          <p>庭院里的枫叶转红，午后阳光透过红叶，在地上投下斑驳光影。</p>
+        </div>
+      </div>
+      <div class="moment-card">
+        <div class="moment-image">
+          <div class="img-placeholder" aria-label="冬日腊梅">🏮</div>
+        </div>
+        <div class="moment-info">
+          <h4>冬日 · 赏雪</h4>
+          <p>红泥小火炉，绿蚁新醅酒。晚来天欲雪，能饮一杯无。</p>
+        </div>
+      </div>
+      <div class="moment-card">
+        <div class="moment-image">
+          <div class="img-placeholder" aria-label="雨打芭蕉">🌿</div>
+        </div>
+        <div class="moment-info">
+          <h4>雨后 · 新绿</h4>
+          <p>一夜春雨过后，院中草木焕发新绿，空气里满是泥土与青草的芬芳。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Visit -->
+<section class="section" id="visit">
+  <div class="section-inner visit-grid">
+    <div>
+      <div class="section-label reveal">Visit</div>
+      <h2 class="section-title reveal reveal-delay-1">来访指引</h2>
+      <div class="ink-divider reveal reveal-delay-1"></div>
+      <p class="section-text reveal reveal-delay-1">
+        小院隐于市井深处，闹中取静。期待与你在这一方天地相遇。
+      </p>
+      <div class="visit-info" style="margin-top: var(--space-lg);">
+        <div class="visit-item reveal reveal-delay-2">
+          <div class="visit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <h4>开放时间</h4>
+            <p>周二至周日 10:00 — 18:00<br>周一闭院休整</p>
+          </div>
+        </div>
+        <div class="visit-item reveal reveal-delay-3">
+          <div class="visit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <h4>地址</h4>
+            <p>城市老城区，青石巷尽头<br>找到那扇木门，推开便是</p>
+          </div>
+        </div>
+        <div class="visit-item reveal reveal-delay-4">
+          <div class="visit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <h4>预约方式</h4>
+            <p>请提前一日预约<br>xiaoyuan@courtyard.cn</p>
+          </div>
+        </div>
+      </div>
+      <div class="seal reveal reveal-delay-5">小院</div>
+    </div>
+    <div class="philosophy-visual reveal reveal-delay-3" style="min-height: 350px;">
+      <div class="lattice" style="width: 260px; height: 260px;">
+        <div class="lattice-corner-top-left"></div>
+        <div class="lattice-corner-top-right"></div>
+        <div class="lattice-corner-bottom-left"></div>
+        <div class="lattice-corner-bottom-right"></div>
+        <div class="lattice-inner" id="latticeGrid2">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">小院</div>
+  <p>一方庭院 &ensp;·&ensp; 四季光阴 &ensp;·&ensp; 心之所向</p>
+  <p style="margin-top: 0.5rem; font-size: 0.7rem;">&copy; 2026 小院 Courtyard</p>
+</footer>
+
+<script>
+  // ── Navigation scroll effect ──
+  const nav = document.getElementById('nav');
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  navToggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => nav.classList.remove('open'));
+  });
+
+  // ── Floating Petals ──
+  const petalsContainer = document.getElementById('petals');
+  for (let i = 0; i < 18; i++) {
+    const petal = document.createElement('div');
+    petal.classList.add('petal');
+    petal.style.left = Math.random() * 100 + '%';
+    petal.style.animationDuration = (8 + Math.random() * 14) + 's';
+    petal.style.animationDelay = Math.random() * 12 + 's';
+    petal.style.width = (5 + Math.random() * 8) + 'px';
+    petal.style.height = (8 + Math.random() * 14) + 'px';
+    petalsContainer.appendChild(petal);
+  }
+
+  // ── Lattice Grid Generation ──
+  function buildLattice(gridId) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('lattice-cell');
+      grid.appendChild(cell);
+    }
+  }
+  buildLattice('latticeGrid');
+  buildLattice('latticeGrid2');
+
+  // Lattice animation observer
+  const latticeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const cells = entry.target.querySelectorAll('.lattice-cell');
+        cells.forEach((cell, i) => {
+          setTimeout(() => cell.classList.add('visible'), i * 120);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.lattice-inner').forEach(grid => {
+    latticeObserver.observe(grid);
+  });
+
+  // ── Scroll Reveal ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── Smooth Scroll for Nav Links ──
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ── Abacus Calculator ──
+  (function() {
+    const exprEl = document.getElementById('abacus-expression');
+    const resultEl = document.getElementById('abacus-result');
+    let current = '0', previous = '', op = null, reset = false;
+
+    function update() {
+      exprEl.textContent = (previous || '') + ' ' + (op || '') + (op ? ' ' + current : (previous ? '' : ''));
+      resultEl.textContent = current;
+    }
+
+    function digit(d) {
+      if (reset) { current = d; reset = false; }
+      else { current = current === '0' ? d : current + d; }
+      update();
+    }
+
+    function decimal() {
+      if (reset) { current = '0.'; reset = false; update(); return; }
+      if (!current.includes('.')) current += '.';
+      update();
+    }
+
+    function handleOp(o) {
+      if (op !== null && !reset) calc();
+      previous = current; op = o; reset = true; update();
+    }
+
+    function calc() {
+      if (op === null || reset) return;
+      const a = parseFloat(previous), b = parseFloat(current);
+      let r;
+      switch (op) {
+        case '+': r = a + b; break;
+        case '-': r = a - b; break;
+        case '*': r = a * b; break;
+        case '/': r = b !== 0 ? a / b : 'Error'; break;
+        case '%': r = b !== 0 ? a % b : 'Error'; break;
+        default: return;
+      }
+      if (typeof r === 'number') r = parseFloat(r.toPrecision(12));
+      exprEl.textContent = previous + ' ' + op + ' ' + current + ' =';
+      previous = ''; current = String(r); op = null; reset = true; update();
+    }
+
+    function clearAll() {
+      current = '0'; previous = ''; op = null; reset = false; update();
+    }
+
+    function backspace() {
+      if (current.length <= 1 || (current.length === 2 && current.startsWith('-'))) current = '0';
+      else current = current.slice(0, -1);
+      update();
+    }
+
+    document.querySelectorAll('.abacus-key').forEach(k => {
+      k.addEventListener('click', function() {
+        const a = this.dataset.action, v = this.dataset.value;
+        if (a === 'digit') digit(v);
+        else if (a === 'decimal') decimal();
+        else if (a === 'operator') handleOp(v);
+        else if (a === 'equals') calc();
+        else if (a === 'clear') clearAll();
+        else if (a === 'backspace') backspace();
+      });
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key >= '0' && e.key <= '9') digit(e.key);
+      else if (e.key === '.') decimal();
+      else if (e.key === '+') handleOp('+');
+      else if (e.key === '-') handleOp('-');
+      else if (e.key === '*') handleOp('*');
+      else if (e.key === '/') { e.preventDefault(); handleOp('/'); }
+      else if (e.key === '%') handleOp('%');
+      else if (e.key === 'Enter' || e.key === '=') calc();
+      else if (e.key === 'Escape') clearAll();
+      else if (e.key === 'Backspace') backspace();
+    });
+
+    // Decorative abacus rods
+    const rodsContainer = document.getElementById('abacus-rods');
+    if (rodsContainer) {
+      for (let i = 0; i < 7; i++) {
+        const rod = document.createElement('div');
+        rod.className = 'abacus-rod';
+        const above = i < 3 ? 2 : 1;
+        const below = i < 3 ? 4 : 5;
+        for (let j = 0; j < above; j++) {
+          const bead = document.createElement('div');
+          bead.className = 'abacus-bead';
+          rod.appendChild(bead);
+        }
+        for (let j = 0; j < below; j++) {
+          const bead = document.createElement('div');
+          bead.className = 'abacus-bead';
+          bead.style.opacity = j === below - 1 ? '0.4' : '0.7';
+          rod.appendChild(bead);
+        }
+        rodsContainer.appendChild(rod);
+      }
+    }
+    update();
+  })();
+
+  // ── Naval Ravikant Quotes ──
+  (function() {
+    const quotes = [
+      { theme: '财富', zh: '追求财富，而非金钱或地位。财富是你在睡觉时也能为你赚钱的资产。', en: 'Seek wealth, not money or status. Wealth is having assets that earn while you sleep.' },
+      { theme: '财富', zh: '你无法通过出租时间致富。你必须拥有股权——一家企业的一部分，才能获得财务自由。', en: "You're not going to get rich renting out your time. You must own equity to gain your financial freedom." },
+      { theme: '财富', zh: '与长期主义者玩长期游戏。复利不仅适用于财富，也适用于人际关系和声誉。', en: 'Play long-term games with long-term people. Compounding works for wealth, relationships, and reputation.' },
+      { theme: '财富', zh: '把自己产品化。你有独特的知识、技能和经历，这些都是无法被轻易复制的。', en: 'Productize yourself. Your unique knowledge, skills, and experiences cannot be easily replicated.' },
+      { theme: '幸福', zh: '幸福是一种选择，也是一种可以培养的技能。幸福并不来自于外部环境，而来自于内心的平静。', en: 'Happiness is a choice and a skill you can develop. It comes from inner peace, not external circumstances.' },
+      { theme: '幸福', zh: '欲望是你与自己签订的契约，让你在得到想要的东西之前一直不快乐。', en: 'Desire is a contract you make with yourself to be unhappy until you get what you want.' },
+      { theme: '幸福', zh: '一颗平静的心，一个健康的身体，一个充满爱的家。这些东西买不到，必须靠自己培养。', en: 'A calm mind, a fit body, and a house full of love. These cannot be bought — they must be cultivated.' },
+      { theme: '决策', zh: '如果你不能在大事上迅速做出决定，说明你还没有掌握决策的原则。', en: 'If you cannot decide quickly on big things, you have not internalized decision-making principles.' },
+      { theme: '决策', zh: '选择做那些即使失败了也无怨无悔的事情。以冒险开始，以稳健结束。', en: 'Choose things where even if you fail, you would not regret it. Start with risk, end with stability.' },
+      { theme: '阅读', zh: '读你真正热爱的书，直到你爱上阅读本身。不要为了完成书单而读书。', en: 'Read what you love until you love to read. Do not read just to finish a checklist.' },
+      { theme: '阅读', zh: '最好的书是那些你能反复阅读、每次都有新收获的书。它们是你思想的基石。', en: 'The best books are those you can reread and gain new insights each time. They are the foundation of your thinking.' },
+      { theme: '健康', zh: '没有健康，一切都是空谈。每天花一小时锻炼，你余生每天都会赢回这一个小时。', en: 'Without health, nothing else matters. Spend an hour a day exercising, and you win back that hour every day.' },
+      { theme: '智慧', zh: '具体的表扬，泛泛的批评。赞美时指出具体的人和事，批评时只对事不对人。', en: 'Praise specifically, criticize generally. Name the person and deed when praising; criticize the category.' },
+      { theme: '智慧', zh: '当下的重要性被高估了；复利的威力被低估了。微小而持续的进步胜过偶尔的爆发。', en: 'The present is overestimated; compounding is underestimated. Small consistent progress beats occasional bursts.' },
+      { theme: '智慧', zh: '与其追求"最优"，不如追求"足够好"然后继续前行。完美是进步的敌人。', en: 'Rather than seeking the optimal, seek good enough and move on. Perfection is the enemy of progress.' },
+    ];
+
+    const themes = ['财富', '幸福', '决策', '阅读', '健康', '智慧'];
+    const grid = document.getElementById('naval-grid');
+    if (!grid) return;
+
+    themes.forEach(theme => {
+      const tq = quotes.filter(q => q.theme === theme);
+      if (!tq.length) return;
+      const ch = document.createElement('div');
+      ch.className = 'naval-chapter reveal';
+      ch.innerHTML = '<h3>' + theme + '</h3>';
+      grid.appendChild(ch);
+      tq.forEach(q => {
+        const card = document.createElement('div');
+        card.className = 'naval-card reveal reveal-delay-1';
+        card.innerHTML = '<div class="naval-theme">' + q.theme + '</div><div class="naval-quote-zh">' + q.zh + '</div><div class="naval-quote-en">' + q.en + '</div>';
+        grid.appendChild(card);
+      });
+    });
+
+    document.querySelectorAll('#study .reveal').forEach(el => revealObserver.observe(el));
+  })();
+</script>
+</body>
+</html>
