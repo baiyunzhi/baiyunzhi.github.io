@@ -3,133 +3,318 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<meta name="theme-color" content="#1a0f0a">
+<meta name="theme-color" content="#faf7f2">
 <title>德州扒鸡 — 从小鸡到金鹏的扑克之旅</title>
 <style>
+/* ===== Xiaoyuan Design System for 德州扒鸡 ===== */
+:root{
+  --paper:#faf7f2;--paper-dark:#f0ebe0;--ink:#2c2416;--ink-light:#5c5240;--ink-lighter:#8a7e6c;
+  --vermillion:#c43a31;--vermillion-dark:#a33028;
+  --jade:#5b8c6f;--jade-dark:#3d6b52;--jade-pale:#e0efe5;
+  --gold:#b8a57a;--gold-light:#d4c9a8;
+  --cream:#fdf9f3;
+  --shadow-sm:0 2px 8px rgba(44,36,22,0.06);
+  --shadow-md:0 4px 20px rgba(44,36,22,0.08);
+  --radius-sm:8px;--radius-md:16px;--radius-lg:24px;
+  --transition:0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth}
+
 body{
-  font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-  background:#1a0f0a;color:#e8d5c4;min-height:100vh;overflow-x:hidden;
-  background-image:radial-gradient(ellipse at 50% 0,#2a1a10 0%,#1a0f0a 60%,#0d0805 100%);
+  font-family:'Noto Sans TC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
 }
-a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
+/* Grain texture */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:256px 256px;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--paper)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+
+a{color:var(--vermillion);text-decoration:none}a:hover{color:var(--vermillion-dark)}
 .container{max-width:1100px;margin:0 auto;padding:0 16px}
+
 .page{display:none;padding:24px 0 60px}
-.page.active{display:block}
+.page.active{display:block;animation:fadeIn 0.35s ease}
+
 .page-header{text-align:center;margin-bottom:32px}
-.page-header h1{font-size:1.8rem;color:#f0b90b;margin-bottom:8px}
-.page-header p{font-size:0.95rem;color:#a09080}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(26,15,10,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(240,185,11,0.15);position:sticky;top:0;z-index:100}
-.nav-logo{display:flex;align-items:center;gap:8px;font-size:1.2rem;font-weight:700;color:#f0b90b}
+.page-header h1{font-family:'Ma Shan Zheng',cursive;font-size:2rem;color:var(--ink);margin-bottom:8px;font-weight:400;letter-spacing:0.06em}
+.page-header p{font-size:0.95rem;color:var(--ink-lighter)}
+
+/* Nav — xiaoyuan sticky header */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(250,247,242,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(184,165,122,0.15);position:sticky;top:0;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;font-family:'Ma Shan Zheng',cursive;font-size:1.3rem;color:var(--ink);letter-spacing:0.06em}
 .nav-logo svg{width:28px;height:28px}
 .nav-links{display:flex;gap:4px;list-style:none;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;-ms-overflow-style:none;scrollbar-width:none}.nav-links::-webkit-scrollbar{display:none}
-.nav-links a{padding:6px 14px;border-radius:6px;font-size:0.85rem;color:#a09080;transition:all 0.2s;cursor:pointer}
-.nav-links a:hover,.nav-links a.active{color:#f0b90b;background:rgba(240,185,11,0.1)}
+.nav-links a{padding:6px 14px;border-radius:var(--radius-sm);font-size:0.85rem;color:var(--ink-light);transition:all var(--transition);cursor:pointer}
+.nav-links a:hover,.nav-links a.active{color:var(--ink);background:var(--jade-pale)}
+
+/* Hero */
 .hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 16px 20px}
 .hero-characters{display:flex;align-items:center;justify-content:center;gap:0;width:100%;max-width:500px;margin-bottom:16px}
-.hero-title{font-size:2.5rem;font-weight:800;color:#f0b90b;margin-bottom:8px;text-shadow:0 0 40px rgba(240,185,11,0.2);letter-spacing:2px}
-.hero-sub{font-size:1rem;color:#a09080;margin-bottom:24px}
-.hero-btn{display:inline-block;padding:14px 48px;border-radius:12px;background:linear-gradient(135deg,#f0b90b,#d4a008);color:#1a0f0a;font-size:1.1rem;font-weight:700;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 24px rgba(240,185,11,0.3)}
-.hero-btn:hover{transform:translateY(-2px);box-shadow:0 6px 32px rgba(240,185,11,0.4)}
+.hero-title{font-family:'Ma Shan Zheng',cursive;font-size:2.5rem;color:var(--ink);margin-bottom:8px;letter-spacing:2px;font-weight:400}
+.hero-sub{font-size:1rem;color:var(--ink-lighter);margin-bottom:24px}
+.hero-btn{display:inline-block;padding:14px 48px;border-radius:var(--radius-md);background:var(--vermillion);color:#fff;font-size:1.1rem;font-weight:600;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 20px rgba(196,58,49,0.2)}
+.hero-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(196,58,49,0.3);background:var(--vermillion-dark)}
+
+/* Game Grid Cards */
 .game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:32px}
-.game-card{background:linear-gradient(135deg,#2a1a10,#1f120a);border-radius:12px;padding:20px;border:1px solid rgba(240,185,11,0.08);cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden}
-.game-card:hover{transform:translateY(-3px);border-color:rgba(240,185,11,0.2);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.game-card{background:var(--cream);border-radius:var(--radius-md);padding:20px;border:1px solid rgba(184,165,122,0.12);cursor:pointer;transition:all var(--transition);position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}
+.game-card:hover{transform:translateY(-3px);border-color:var(--gold-light);box-shadow:var(--shadow-md)}
 .game-card .gc-icon{font-size:2rem;margin-bottom:10px}
-.game-card h3{font-size:1.05rem;color:#f0e8d0;margin-bottom:6px}
-.game-card p{font-size:0.85rem;color:#a09080;line-height:1.5}
+.game-card h3{font-family:'Noto Serif TC',serif;font-size:1.05rem;color:var(--ink);margin-bottom:6px}
+.game-card p{font-size:0.85rem;color:var(--ink-lighter);line-height:1.5}
 .game-card .gc-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.7rem;font-weight:600;margin-top:10px}
-.badge-new{background:rgba(240,185,11,0.15);color:#f0b90b}
-.game-area{max-width:800px;margin:0 auto;background:linear-gradient(180deg,#2a1a10,#1a0f0a);border-radius:16px;border:1px solid rgba(240,185,11,0.1);padding:20px;position:relative;min-height:500px}
-.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(240,185,11,0.1)}
-.game-header h2{font-size:1.1rem;color:#f0b90b}
+.badge-new{background:var(--jade-pale);color:var(--jade-dark)}
+
+/* Game Area */
+.game-area{max-width:800px;margin:0 auto;background:var(--cream);border-radius:var(--radius-lg);border:1px solid rgba(184,165,122,0.1);padding:20px;position:relative;min-height:500px;box-shadow:var(--shadow-sm)}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(184,165,122,0.12)}
+.game-header h2{font-family:'Ma Shan Zheng',cursive;font-size:1.2rem;color:var(--ink);font-weight:400;letter-spacing:0.06em}
 .game-stats{display:flex;gap:16px;font-size:0.85rem}
-.game-stat{display:flex;align-items:center;gap:4px}
+.game-stat{display:flex;align-items:center;gap:4px;color:var(--ink-light)}
 .gs-icon{font-size:1rem}
-.gs-val{color:#f0e8d0;font-weight:600}
+.gs-val{color:var(--ink);font-weight:600}
+
+/* Table Scene */
 .table-scene{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 16px;position:relative;min-height:140px}
 .character-box{flex:0 0 120px;text-align:center;position:relative;z-index:2}
 .character-box svg{width:110px;height:110px;display:block;margin:0 auto}
 .char-name{font-size:0.75rem;margin-top:2px;font-weight:600}
-.char-name.chick{color:#ff8c42}
-.char-name.hawk{color:#8b4513}
-.char-speech{position:absolute;top:-10px;font-size:0.75rem;color:#a09080;background:rgba(0,0,0,0.6);padding:3px 10px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity 0.3s}
+.char-name.chick{color:var(--vermillion)}
+.char-name.hawk{color:var(--ink)}
+.char-speech{position:absolute;top:-10px;font-size:0.75rem;color:var(--ink-light);background:var(--paper);padding:3px 10px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity 0.3s;border:1px solid rgba(184,165,122,0.12)}
 .char-speech.show{opacity:1}
 .chick .char-speech,.hawk .char-speech{left:50%;transform:translateX(-50%)}
-.vs-divider{font-size:1.5rem;font-weight:800;color:rgba(240,185,11,0.2);flex:0 0 40px;text-align:center;z-index:1}
-.table-felt{flex:1;max-width:280px;background:radial-gradient(ellipse,#3a2a1a,#1f120a);border-radius:40px;border:3px solid #5a3a1a;padding:16px;text-align:center;position:relative;z-index:2;box-shadow:inset 0 0 30px rgba(0,0,0,0.3),0 4px 20px rgba(0,0,0,0.4)}
-.table-felt .round-label{font-size:0.7rem;color:#8a7a6a;margin-bottom:6px}
+.vs-divider{font-family:'Ma Shan Zheng',cursive;font-size:1.5rem;color:rgba(184,165,122,0.3);flex:0 0 40px;text-align:center;z-index:1}
+
+/* Table Felt — xiaoyuan jade felt */
+.table-felt{flex:1;max-width:280px;background:radial-gradient(ellipse,#638b72,#3a5a48);border-radius:40px;border:3px solid var(--gold-light);padding:16px;text-align:center;position:relative;z-index:2;box-shadow:inset 0 0 30px rgba(44,36,22,0.2),0 4px 20px rgba(44,36,22,0.15)}
+.table-felt .round-label{font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:6px}
 .table-felt .hand-cards{display:flex;justify-content:center;gap:8px;margin-bottom:6px}
-.card{width:50px;height:70px;background:#fff;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.3);position:relative;overflow:hidden}
+
+/* Cards */
+.card{width:50px;height:70px;background:linear-gradient(145deg,#fefefc,#faf7f2);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;box-shadow:0 2px 8px rgba(44,36,22,0.15);position:relative;overflow:hidden;font-family:'Noto Serif TC',serif}
 .card .cr{font-size:1.1rem;line-height:1}
 .card .cs{font-size:0.85rem;line-height:1;margin-top:-2px}
-.card.red{color:#d32f2f}
-.card.black{color:#222}
-.card.card-back{background:linear-gradient(135deg,#5a3a1a,#8b6914);border:2px solid #f0b90b}
+.card.red{color:var(--vermillion)}
+.card.black{color:var(--ink)}
+.card.card-back{background:repeating-linear-gradient(45deg,var(--paper-dark) 0,var(--paper-dark) 3px,var(--gold-light) 3px,var(--gold-light) 6px);border:2px solid var(--gold)}
 .card.card-back::after{content:'🐤';font-size:1.5rem}
-.scenario-box{text-align:center;margin:12px 0 16px;padding:12px;background:rgba(0,0,0,0.2);border-radius:10px}
-.scenario-pos{font-size:0.8rem;color:#a09080;margin-bottom:4px}
-.scenario-text{font-size:0.95rem;color:#e8d5c4;line-height:1.5}
-.scenario-text strong{color:#f0b90b}
+
+/* Scenario */
+.scenario-box{text-align:center;margin:12px 0 16px;padding:12px;background:var(--paper-dark);border-radius:var(--radius-sm)}
+.scenario-pos{font-size:0.8rem;color:var(--ink-lighter);margin-bottom:4px}
+.scenario-text{font-size:0.95rem;color:var(--ink);line-height:1.5}
+.scenario-text strong{color:var(--vermillion)}
+
+/* Action Buttons */
 .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px}
-.btn-action{padding:12px 28px;border-radius:10px;border:2px solid transparent;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s;min-width:100px;text-transform:uppercase;letter-spacing:1px}
-.btn-fold{background:rgba(200,50,50,0.15);border-color:rgba(200,50,50,0.3);color:#e06060}
-.btn-fold:hover{background:rgba(200,50,50,0.25);border-color:#c83232}
-.btn-call{background:rgba(50,150,200,0.15);border-color:rgba(50,150,200,0.3);color:#60b0e0}
-.btn-call:hover{background:rgba(50,150,200,0.25);border-color:#3296c8}
-.btn-raise{background:rgba(240,185,11,0.15);border-color:rgba(240,185,11,0.3);color:#f0b90b}
-.btn-raise:hover{background:rgba(240,185,11,0.25);border-color:#f0b90b}
-.btn-action:disabled{opacity:0.4;cursor:not-allowed;transform:none!important}
+.btn-action{padding:12px 28px;border-radius:var(--radius-sm);border:2px solid transparent;font-size:1rem;font-weight:600;cursor:pointer;transition:all var(--transition);min-width:100px;letter-spacing:1px;font-family:'Noto Sans TC',sans-serif}
+.btn-fold{background:rgba(196,58,49,0.08);border-color:rgba(196,58,49,0.2);color:var(--vermillion)}
+.btn-fold:hover{background:rgba(196,58,49,0.15);border-color:var(--vermillion)}
+.btn-call{background:rgba(91,140,111,0.08);border-color:rgba(91,140,111,0.2);color:var(--jade-dark)}
+.btn-call:hover{background:rgba(91,140,111,0.15);border-color:var(--jade)}
+.btn-raise{background:rgba(184,165,122,0.08);border-color:rgba(184,165,122,0.25);color:var(--gold)}
+.btn-raise:hover{background:rgba(184,165,122,0.18);border-color:var(--gold)}
+.btn-action:disabled{opacity:0.35;cursor:not-allowed;transform:none!important}
 .btn-action:not(:disabled):hover{transform:translateY(-2px)}
-.result-box{display:none;text-align:center;padding:16px;margin-top:12px;border-radius:12px;animation:fadeIn 0.3s}
+
+/* Result */
+.result-box{display:none;text-align:center;padding:16px;margin-top:12px;border-radius:var(--radius-md);animation:fadeIn 0.3s}
 .result-box.show{display:block}
-.result-box.correct{background:rgba(68,204,68,0.1);border:1px solid rgba(68,204,68,0.2)}
-.result-box.wrong{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.2)}
+.result-box.correct{background:var(--jade-pale);border:1px solid rgba(91,140,111,0.2)}
+.result-box.wrong{background:rgba(196,58,49,0.06);border:1px solid rgba(196,58,49,0.15)}
 .result-box .rb-icon{font-size:2rem;margin-bottom:6px}
-.result-box .rb-text{font-size:0.95rem;margin-bottom:4px}
-.result-box .rb-detail{font-size:0.8rem;color:#a09080}
-.btn-next{margin-top:12px;padding:8px 24px;border-radius:8px;background:rgba(240,185,11,0.15);color:#f0b90b;border:1px solid rgba(240,185,11,0.2);cursor:pointer;font-size:0.9rem;transition:all 0.2s}
-.btn-next:hover{background:rgba(240,185,11,0.25)}
+.result-box .rb-text{font-size:0.95rem;margin-bottom:4px;color:var(--ink)}
+.result-box .rb-detail{font-size:0.8rem;color:var(--ink-lighter)}
+.btn-next{margin-top:12px;padding:8px 24px;border-radius:var(--radius-sm);background:var(--paper-dark);color:var(--ink);border:1px solid rgba(184,165,122,0.2);cursor:pointer;font-size:0.9rem;transition:all var(--transition);font-family:'Noto Sans TC',sans-serif}
+.btn-next:hover{background:var(--gold-light);border-color:var(--gold)}
+
+/* Start / Game Over */
 .start-screen{text-align:center;padding:30px 16px}
 .start-screen .ss-icon{font-size:4rem;margin-bottom:12px}
-.start-screen h3{font-size:1.4rem;color:#f0b90b;margin-bottom:8px}
-.start-screen p{font-size:0.9rem;color:#a09080;margin-bottom:20px;line-height:1.6}
+.start-screen h3{font-family:'Ma Shan Zheng',cursive;font-size:1.5rem;color:var(--ink);margin-bottom:8px;font-weight:400}
+.start-screen p{font-size:0.9rem;color:var(--ink-lighter);margin-bottom:20px;line-height:1.6}
 .start-screen .ss-rules{text-align:left;display:inline-block;margin-bottom:20px}
-.start-screen .ss-rules li{margin:6px 0;font-size:0.85rem;color:#a09080;list-style:none}
-.start-screen .ss-rules li::before{content:'🐤 ';color:#f0b90b}
+.start-screen .ss-rules li{margin:6px 0;font-size:0.85rem;color:var(--ink-lighter);list-style:none}
+.start-screen .ss-rules li::before{content:'🐤 '}
 .gameover-screen{text-align:center;padding:30px 16px}
-.gameover-screen .go-title{font-size:1.6rem;font-weight:800;margin-bottom:8px}
+.gameover-screen .go-title{font-family:'Ma Shan Zheng',cursive;font-size:1.6rem;color:var(--ink);margin-bottom:8px;font-weight:400}
 .gameover-screen .go-rank{font-size:3rem;margin-bottom:8px}
-.gameover-screen .go-desc{font-size:0.95rem;color:#a09080;margin-bottom:16px;line-height:1.6}
+.gameover-screen .go-desc{font-size:0.95rem;color:var(--ink-lighter);margin-bottom:16px;line-height:1.6}
 .gameover-screen .go-stats{display:flex;justify-content:center;gap:24px;margin-bottom:20px}
 .gameover-screen .go-stat{text-align:center}
-.gameover-screen .go-stat .num{font-size:1.5rem;font-weight:700;color:#f0b90b}
-.gameover-screen .go-stat .lbl{font-size:0.75rem;color:#a09080}
+.gameover-screen .go-stat .num{font-family:'Noto Serif TC',serif;font-size:1.5rem;font-weight:700;color:var(--vermillion)}
+.gameover-screen .go-stat .lbl{font-size:0.75rem;color:var(--ink-lighter)}
+
+/* Character Expressions */
 .character-box .expr-mouth,.character-box .expr-eye{transition:all 0.3s}
 .chick-happy .expr-mouth{transform:translateY(-3px)}
 .chick-scared .expr-eye{transform:scale(1.3)}
 .chick-scared .expr-mouth{transform:scaleY(1.5)}
 .hawk-angry .expr-mouth{transform:translateY(2px)}
 .hawk-amused .expr-mouth{transform:scaleY(1.3)}
-.mystery-box{width:110px;height:110px;margin:0 auto;display:flex;align-items:center;justify-content:center;background:#2a1a10;border-radius:50%;border:3px solid #f0b90b;font-size:4rem;transition:all 0.5s}
-.mystery-box.reveal-fish{background:#ff8c42;border-color:#e07b3a}
-.mystery-box.reveal-shark{background:#8b4513;border-color:#6b3010}
+
+/* Mystery Box */
+.mystery-box{width:110px;height:110px;margin:0 auto;display:flex;align-items:center;justify-content:center;background:var(--paper-dark);border-radius:50%;border:3px solid var(--gold);font-size:4rem;transition:all 0.5s}
+.mystery-box.reveal-fish{background:var(--vermillion-light, #e8a09b);border-color:var(--vermillion)}
+.mystery-box.reveal-shark{background:var(--ink-light);border-color:var(--ink)}
 @keyframes mysteryReveal{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 .mystery-reveal{animation:mysteryReveal 0.5s}
+
+/* Odds */
 .odds-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.btn-odds{padding:14px 10px;border-radius:10px;border:2px solid rgba(240,185,11,0.2);background:rgba(240,185,11,0.08);color:#f0e8d0;font-size:0.95rem;cursor:pointer;transition:all 0.2s;font-weight:600;text-align:center}
-.btn-odds:hover{background:rgba(240,185,11,0.15);border-color:rgba(240,185,11,0.3);transform:translateY(-1px)}
+.btn-odds{padding:14px 10px;border-radius:var(--radius-sm);border:2px solid rgba(184,165,122,0.15);background:var(--paper);color:var(--ink);font-size:0.95rem;cursor:pointer;transition:all var(--transition);font-weight:500;text-align:center;font-family:'Noto Sans TC',sans-serif}
+.btn-odds:hover{background:var(--paper-dark);border-color:var(--gold);transform:translateY(-1px)}
 .btn-odds:disabled{opacity:0.4;cursor:not-allowed;transform:none!important}
-.btn-odds.selected{background:rgba(68,204,68,0.15);border-color:#44cc44;color:#44cc44}
-.btn-odds.wrong{background:rgba(255,68,68,0.15);border-color:#ff4444;color:#ff4444}
+.btn-odds.selected{background:var(--jade-pale);border-color:var(--jade);color:var(--jade-dark)}
+.btn-odds.wrong{background:rgba(196,58,49,0.06);border-color:var(--vermillion);color:var(--vermillion)}
 .odds-felt{max-width:300px!important}
 @media(max-width:640px){.odds-felt{max-width:220px!important}.odds-actions{gap:6px}.btn-odds{padding:10px 6px;font-size:0.85rem}}
 @media(max-width:420px){.odds-felt{max-width:180px!important}}
+
+/* Animations */
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-4px)}}
 .shake{animation:shake 0.5s}
 .bounce{animation:bounce 0.4s}
+
+/* Achievements */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:20px}
+.ach-card{background:var(--cream);border-radius:var(--radius-md);padding:16px;border:1px solid rgba(184,165,122,0.1);text-align:center;box-shadow:var(--shadow-sm)}
+.ach-card .ach-rank{font-size:2.5rem;margin-bottom:6px}
+.ach-card .ach-name{font-family:'Noto Serif TC',serif;font-size:1rem;color:var(--ink);font-weight:600;margin-bottom:4px}
+.ach-card .ach-score{font-size:0.85rem;color:var(--ink-lighter)}
+.ach-card .ach-high{font-size:0.8rem;color:var(--jade-dark);margin-top:4px}
+
+/* Share Overlay */
+.share-overlay{position:fixed;inset:0;background:rgba(44,36,22,0.85);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.3s}
+.share-box{text-align:center;max-width:380px;width:90%}
+.share-box canvas{width:100%;border-radius:12px;margin-bottom:12px}
+.share-actions{display:flex;gap:8px;justify-content:center}
+.share-actions button{padding:10px 20px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:0.9rem;font-weight:600;font-family:'Noto Sans TC',sans-serif}
+.share-dl{background:var(--gold);color:var(--ink)}
+.share-close{background:var(--paper-dark);color:var(--ink-light)}
+
+/* Unlock */
+.unlock-guide{display:none;margin:16px auto 0;max-width:400px;padding:20px;background:var(--cream);border-radius:var(--radius-md);border:1px solid rgba(184,165,122,0.12);text-align:center;animation:fadeIn 0.5s}
+.unlock-guide.show{display:block}
+.unlock-guide .ug-title{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;color:var(--ink);font-weight:400;margin-bottom:6px}
+.unlock-guide .ug-desc{font-size:0.85rem;color:var(--ink-lighter);margin-bottom:12px}
+.unlock-guide .ug-btn{display:inline-block;padding:10px 24px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:0.9rem;font-weight:600;margin:4px;font-family:'Noto Sans TC',sans-serif}
+.unlock-guide .ug-btn-primary{background:var(--vermillion);color:#fff}
+.unlock-guide .ug-btn-invite{background:var(--jade-pale);color:var(--jade-dark);border:1px solid rgba(91,140,111,0.2)}
+
+/* Invite Overlay */
+.invite-overlay{position:fixed;inset:0;background:rgba(44,36,22,0.85);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.3s}
+.invite-box{background:var(--paper);border-radius:var(--radius-lg);padding:24px;max-width:380px;width:90%;border:1px solid rgba(184,165,122,0.15);text-align:center;box-shadow:var(--shadow-lg)}
+.invite-box .iv-title{font-family:'Ma Shan Zheng',cursive;font-size:1.2rem;color:var(--ink);font-weight:400;margin-bottom:6px}
+.invite-box .iv-desc{font-size:0.85rem;color:var(--ink-lighter);margin-bottom:12px}
+.invite-box .iv-code{font-size:1.4rem;color:var(--ink);background:var(--paper-dark);padding:12px;border-radius:var(--radius-sm);letter-spacing:4px;margin-bottom:12px;font-weight:700;user-select:all;font-family:'Noto Serif TC',serif}
+.invite-box .iv-progress{font-size:0.85rem;color:var(--ink-lighter);margin-bottom:12px}
+.invite-box .iv-progress strong{color:var(--vermillion)}
+.invite-box .iv-close{padding:8px 20px;border-radius:var(--radius-sm);border:1px solid rgba(184,165,122,0.2);background:transparent;color:var(--ink-lighter);cursor:pointer;font-family:'Noto Sans TC',sans-serif}
+.invite-box .iv-close:hover{background:var(--paper-dark)}
+.invite-box .iv-pb{width:100%;height:8px;background:rgba(44,36,22,0.06);border-radius:4px;margin:6px 0 12px;overflow:hidden}
+.invite-box .iv-pb-fill{height:100%;background:var(--jade);border-radius:4px;transition:width 0.5s}
+.invite-box .iv-link{font-size:0.75rem;color:var(--ink-light);background:var(--paper-dark);padding:8px 10px;border-radius:6px;word-break:break-all;cursor:pointer;user-select:all;margin-bottom:8px;line-height:1.4}
+.invite-box .iv-link:hover{background:var(--gold-light)}
+.invite-box .iv-actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.invite-box .iv-action-btn{padding:8px 14px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;font-family:'Noto Sans TC',sans-serif}
+.invite-box .iv-action-btn:hover{transform:translateY(-1px)}
+.invite-box .iv-input-row{display:flex;gap:6px;margin:8px 0}
+.invite-box .iv-input-row input{flex:1;padding:10px;border-radius:var(--radius-sm);border:1px solid rgba(184,165,122,0.2);background:var(--paper);color:var(--ink);font-size:0.95rem;text-align:center;outline:none;transition:border-color 0.2s;font-family:'Noto Sans TC',sans-serif}
+.invite-box .iv-input-row input:focus{border-color:var(--gold)}
+.invite-box .iv-input-row button{padding:10px 16px;border-radius:var(--radius-sm);border:none;background:var(--gold);color:var(--ink);font-size:0.9rem;font-weight:600;cursor:pointer}
+.invite-box .iv-confirm-msg{font-size:0.8rem;color:var(--jade-dark);margin:4px 0;min-height:1.2em}
+.iv-poster-box{text-align:center;margin:8px 0}
+.iv-poster-box canvas{width:100%;max-width:300px;border-radius:8px;cursor:pointer}
+.invite-home-btn{display:block;margin:16px auto 0;padding:12px 28px;border-radius:var(--radius-md);border:2px solid rgba(91,140,111,0.2);background:var(--jade-pale);color:var(--jade-dark);font-size:0.95rem;font-weight:600;cursor:pointer;transition:all var(--transition);text-align:center;font-family:'Noto Sans TC',sans-serif}
+.invite-home-btn:hover{background:rgba(91,140,111,0.12);border-color:var(--jade);transform:translateY(-2px)}
+.invite-home-btn .ih-sub{display:block;font-size:0.7rem;color:var(--ink-lighter);font-weight:400;margin-top:2px}
+
+/* Badges */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:16px}
+.badge-item{text-align:center;padding:12px 6px 8px;border-radius:var(--radius-md);background:var(--cream);border:1px solid rgba(184,165,122,0.1);transition:all var(--transition);cursor:pointer;position:relative;overflow:hidden}
+.badge-item:hover{transform:translateY(-2px);border-color:var(--gold-light)}
+.badge-item .bi-icon{font-size:1.8rem;margin-bottom:2px;display:block}
+.badge-item .bi-name{font-size:0.62rem;color:var(--ink);display:block;line-height:1.2}
+.badge-item .bi-bar{width:100%;height:3px;background:rgba(44,36,22,0.06);border-radius:2px;margin-top:6px;overflow:hidden}
+.badge-item .bi-bar-fill{height:100%;border-radius:2px;transition:width 0.5s}
+.badge-item.locked{opacity:0.5;filter:grayscale(0.4)}
+.badge-item.locked .bi-icon{filter:grayscale(0.6)}
+.badge-item.locked .bi-name{color:var(--ink-lighter)}
+.badge-item.locked .bi-bar-fill{background:var(--gold)}
+.badge-item.unlocked{border-color:rgba(91,140,111,0.2);background:var(--jade-pale);box-shadow:0 0 12px rgba(91,140,111,0.06)}
+.badge-item.unlocked .bi-bar-fill{background:var(--jade)}
+.badge-item.just-unlocked{animation:badgePop 0.6s}
+@keyframes badgePop{0%{transform:scale(1)}25%{transform:scale(1.25)}50%{transform:scale(0.9)}75%{transform:scale(1.05)}100%{transform:scale(1)}}
+
+/* Badge Popup */
+.badge-popup{position:fixed;inset:0;background:rgba(44,36,22,0.85);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.2s}
+.badge-popup-box{background:var(--paper);border-radius:var(--radius-lg);padding:28px;max-width:320px;width:90%;border:1px solid rgba(184,165,122,0.15);text-align:center;box-shadow:var(--shadow-md)}
+.badge-popup-box .bp-icon{font-size:3rem;margin-bottom:8px}
+.badge-popup-box .bp-name{font-family:'Noto Serif TC',serif;font-size:1.2rem;color:var(--ink);font-weight:700;margin-bottom:4px}
+.badge-popup-box .bp-desc{font-size:0.85rem;color:var(--ink-lighter);margin-bottom:12px}
+.badge-popup-box .bp-bar{width:100%;height:6px;background:rgba(44,36,22,0.06);border-radius:3px;margin:8px 0;overflow:hidden}
+.badge-popup-box .bp-bar-fill{height:100%;border-radius:3px;transition:width 0.5s}
+.badge-popup-box .bp-progress-text{font-size:0.8rem;color:var(--ink-lighter);margin-bottom:12px}
+.badge-popup-box .bp-close{padding:8px 24px;border-radius:var(--radius-sm);border:1px solid rgba(184,165,122,0.2);background:transparent;color:var(--ink-lighter);cursor:pointer;font-size:0.9rem;font-family:'Noto Sans TC',sans-serif}
+.badge-popup-box .bp-close:hover{background:var(--paper-dark)}
+
+/* Celebration */
+.celebration{position:fixed;inset:0;pointer-events:none;z-index:1000;overflow:hidden;contain:strict}
+.celebration-particle{position:absolute;opacity:0;animation:particleFall linear forwards}
+@keyframes particleFall{0%{transform:translateY(-20px) rotate(0deg) scale(0.5);opacity:1}50%{opacity:1}100%{transform:translateY(calc(100vh + 20px)) rotate(720deg) scale(1);opacity:0}}
+
+/* Nav Badge */
+.nav-badge-count{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:20px;background:var(--jade-pale);border:1px solid rgba(91,140,111,0.12);font-size:0.75rem;color:var(--jade-dark);cursor:pointer;transition:all var(--transition)}
+.nav-badge-count:hover{background:rgba(91,140,111,0.1)}
+
+/* Pay Overlay */
+.pay-overlay{position:fixed;inset:0;background:rgba(44,36,22,0.85);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.3s}
+.pay-box{background:var(--paper);border-radius:var(--radius-lg);padding:28px;max-width:360px;width:90%;border:1px solid rgba(184,165,122,0.15);text-align:center;box-shadow:var(--shadow-lg)}
+.pay-box h3{font-family:'Ma Shan Zheng',cursive;color:var(--ink);font-size:1.2rem;margin-bottom:8px;font-weight:400}
+.pay-box .pay-price{font-family:'Noto Serif TC',serif;font-size:2rem;color:var(--vermillion);font-weight:800;margin:8px 0}
+.pay-box .pay-desc{color:var(--ink-lighter);font-size:0.85rem;margin-bottom:16px}
+.pay-box .pay-btn{display:block;width:100%;padding:12px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:1rem;font-weight:600;margin-bottom:8px;font-family:'Noto Sans TC',sans-serif}
+.pay-btn-primary{background:var(--vermillion);color:#fff}
+.pay-btn-secondary{background:var(--paper-dark);color:var(--ink-lighter);border:1px solid rgba(184,165,122,0.15)!important}
+.pay-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(196,58,49,0.15)}
+.pay-msg{margin-top:10px;font-size:0.85rem;min-height:20px}
+
+/* Daily Challenge */
+.dc-header{text-align:center;padding:20px}
+.dc-header .dc-date{font-size:0.9rem;color:var(--ink-lighter);margin-bottom:4px}
+.dc-header .dc-title{font-family:'Ma Shan Zheng',cursive;font-size:1.3rem;color:var(--ink);font-weight:400}
+.dc-completed{text-align:center;padding:40px;color:var(--jade-dark);font-size:1.1rem}
+
+/* AI Table */
+.ai-table{max-width:600px;margin:0 auto}
+.ai-info{display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.85rem;color:var(--ink-light)}
+.ai-board{display:flex;justify-content:center;gap:6px;margin:12px 0;min-height:80px;flex-wrap:wrap}
+.ai-hand{text-align:center;margin:8px 0}
+.ai-hand-label{font-size:0.75rem;color:var(--ink-lighter);margin-bottom:4px}
+.ai-chips{text-align:center;font-family:'Noto Serif TC',serif;font-size:1.2rem;color:var(--gold);margin:8px 0}
+.ai-result{text-align:center;padding:12px;border-radius:var(--radius-sm);margin-top:10px;font-size:0.95rem}
+.ai-result.win{background:var(--jade-pale);border:1px solid rgba(91,140,111,0.15);color:var(--jade-dark)}
+.ai-result.lose{background:rgba(196,58,49,0.06);border:1px solid rgba(196,58,49,0.12);color:var(--vermillion)}
+.ai-result.draw{background:rgba(184,165,122,0.06);border:1px solid rgba(184,165,122,0.12);color:var(--gold)}
+
+/* Footer */
+.footer{text-align:center;padding:var(--space-lg, 2.5rem) 16px;border-top:1px solid rgba(184,165,122,0.1);margin-top:24px}
+.footer .seal{display:inline-block;width:56px;height:56px;border:2px solid var(--vermillion);border-radius:50%;color:var(--vermillion);font-family:'Ma Shan Zheng',cursive;font-size:1rem;line-height:52px;letter-spacing:0.12em;transform:rotate(-8deg);opacity:0.6;margin-bottom:8px}
+.footer p{font-size:0.65rem;color:var(--ink-lighter);letter-spacing:0.06em}
+
+/* Responsive */
 @media(max-width:640px){
   .nav{padding:10px 12px}.nav-logo{font-size:1rem}.nav-links a{padding:5px 10px;font-size:0.78rem}
   .hero-title{font-size:1.8rem}.hero-sub{font-size:0.85rem}
@@ -148,112 +333,11 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
   .hero-title{font-size:1.5rem}.char-name{font-size:0.65rem}
   .char-speech{font-size:0.65rem;white-space:normal;max-width:80px}
 }
-.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:20px}
-.ach-card{background:linear-gradient(135deg,#2a1a10,#1f120a);border-radius:12px;padding:16px;border:1px solid rgba(240,185,11,0.08);text-align:center}
-.ach-card .ach-rank{font-size:2.5rem;margin-bottom:6px}
-.ach-card .ach-name{font-size:1rem;color:#f0b90b;font-weight:600;margin-bottom:4px}
-.ach-card .ach-score{font-size:0.85rem;color:#a09080}
-.ach-card .ach-high{font-size:0.8rem;color:#6a8a9a;margin-top:4px}
-/* Share, Unlock, Invite, Badge styles */
-.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.3s}
-.share-box{text-align:center;max-width:380px;width:90%}
-.share-box canvas{width:100%;border-radius:12px;margin-bottom:12px}
-.share-actions{display:flex;gap:8px;justify-content:center}
-.share-actions button{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:0.9rem;font-weight:600}
-.share-dl{background:#f0b90b;color:#1a0f0a}
-.share-close{background:rgba(240,185,11,0.15);color:#f0b90b}
-.unlock-guide{display:none;margin:16px auto 0;max-width:400px;padding:20px;background:linear-gradient(135deg,rgba(240,185,11,0.08),rgba(240,185,11,0.02));border-radius:12px;border:1px solid rgba(240,185,11,0.15);text-align:center;animation:fadeIn 0.5s}
-.unlock-guide.show{display:block}
-.unlock-guide .ug-title{font-size:1.1rem;color:#f0b90b;font-weight:700;margin-bottom:6px}
-.unlock-guide .ug-desc{font-size:0.85rem;color:#a09080;margin-bottom:12px}
-.unlock-guide .ug-btn{display:inline-block;padding:10px 24px;border-radius:8px;border:none;cursor:pointer;font-size:0.9rem;font-weight:600;margin:4px}
-.unlock-guide .ug-btn-primary{background:linear-gradient(135deg,#f0b90b,#d4a008);color:#1a0f0a}
-.unlock-guide .ug-btn-invite{background:rgba(68,204,68,0.2);color:#44cc44;border:1px solid rgba(68,204,68,0.3)}
-.invite-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.3s}
-.invite-box{background:#2a1a10;border-radius:16px;padding:24px;max-width:380px;width:90%;border:1px solid rgba(240,185,11,0.2);text-align:center}
-.invite-box .iv-title{font-size:1.2rem;color:#f0b90b;font-weight:700;margin-bottom:6px}
-.invite-box .iv-desc{font-size:0.85rem;color:#a09080;margin-bottom:12px}
-.invite-box .iv-code{font-size:1.4rem;color:#fff;background:rgba(0,0,0,0.3);padding:12px;border-radius:8px;letter-spacing:4px;margin-bottom:12px;font-weight:700;user-select:all}
-.invite-box .iv-progress{font-size:0.85rem;color:#a09080;margin-bottom:12px}
-.invite-box .iv-progress strong{color:#f0b90b}
-.invite-box .iv-close{padding:8px 20px;border-radius:8px;border:1px solid rgba(240,185,11,0.2);background:transparent;color:#a09080;cursor:pointer}
-/* Invite enhanced styles */
-.invite-box .iv-pb{width:100%;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;margin:6px 0 12px;overflow:hidden}
-.invite-box .iv-pb-fill{height:100%;background:linear-gradient(90deg,#44cc44,#66ee66);border-radius:4px;transition:width 0.5s}
-.invite-box .iv-link{font-size:0.75rem;color:#8ac4d8;background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:6px;word-break:break-all;cursor:pointer;user-select:all;margin-bottom:8px;line-height:1.4}
-.invite-box .iv-link:hover{background:rgba(0,0,0,0.5)}
-.invite-box .iv-actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0}
-.invite-box .iv-action-btn{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s}
-.invite-box .iv-action-btn:hover{transform:translateY(-1px)}
-.invite-box .iv-input-row{display:flex;gap:6px;margin:8px 0}
-.invite-box .iv-input-row input{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(240,185,11,0.2);background:rgba(0,0,0,0.3);color:#e8d5c4;font-size:0.95rem;text-align:center;outline:none;transition:border-color 0.2s}
-.invite-box .iv-input-row input:focus{border-color:#f0b90b}
-.invite-box .iv-input-row button{padding:10px 16px;border-radius:8px;border:none;background:#f0b90b;color:#1a0f0a;font-size:0.9rem;font-weight:600;cursor:pointer}
-.invite-box .iv-confirm-msg{font-size:0.8rem;color:#44cc44;margin:4px 0;min-height:1.2em}
-.iv-poster-box{text-align:center;margin:8px 0}
-.iv-poster-box canvas{width:100%;max-width:300px;border-radius:8px;cursor:pointer}
-.invite-home-btn{display:block;margin:16px auto 0;padding:12px 28px;border-radius:12px;border:2px solid rgba(68,204,68,0.3);background:rgba(68,204,68,0.08);color:#44cc44;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.3s;text-align:center}
-.invite-home-btn:hover{background:rgba(68,204,68,0.15);border-color:#44cc44;transform:translateY(-2px)}
-.invite-home-btn .ih-sub{display:block;font-size:0.7rem;color:rgba(68,204,68,0.5);font-weight:400;margin-top:2px}
-.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:16px}
-.badge-item{text-align:center;padding:12px 6px 8px;border-radius:12px;background:rgba(42,26,16,0.8);border:1px solid rgba(240,185,11,0.08);transition:all 0.3s;cursor:pointer;position:relative;overflow:hidden}
-.badge-item:hover{transform:translateY(-2px);border-color:rgba(240,185,11,0.2)}
-.badge-item .bi-icon{font-size:1.8rem;margin-bottom:2px;display:block}
-.badge-item .bi-name{font-size:0.62rem;color:#f0b90b;display:block;line-height:1.2}
-.badge-item .bi-bar{width:100%;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:6px;overflow:hidden}
-.badge-item .bi-bar-fill{height:100%;border-radius:2px;transition:width 0.5s}
-.badge-item.locked{opacity:0.85;filter:grayscale(0.6)}
-.badge-item.locked .bi-icon{filter:grayscale(0.6)}
-.badge-item.locked .bi-name{color:#8a7a6a}
-.badge-item.locked .bi-bar-fill{background:linear-gradient(90deg,#f0b90b,#ffd700)}
-.badge-item.unlocked{border-color:rgba(240,185,11,0.25);background:rgba(240,185,11,0.06);box-shadow:0 0 12px rgba(240,185,11,0.08)}
-.badge-item.unlocked .bi-bar-fill{background:linear-gradient(90deg,#44cc44,#66ee66)}
-.badge-item.just-unlocked{animation:badgePop 0.6s}
-@keyframes badgePop{0%{transform:scale(1)}25%{transform:scale(1.25)}50%{transform:scale(0.9)}75%{transform:scale(1.05)}100%{transform:scale(1)}}
-/* Badge detail popup */
-.badge-popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.2s}
-.badge-popup-box{background:#2a1a10;border-radius:16px;padding:28px;max-width:320px;width:90%;border:1px solid rgba(240,185,11,0.2);text-align:center}
-.badge-popup-box .bp-icon{font-size:3rem;margin-bottom:8px}
-.badge-popup-box .bp-name{font-size:1.2rem;color:#f0b90b;font-weight:700;margin-bottom:4px}
-.badge-popup-box .bp-desc{font-size:0.85rem;color:#a09080;margin-bottom:12px}
-.badge-popup-box .bp-bar{width:100%;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin:8px 0;overflow:hidden}
-.badge-popup-box .bp-bar-fill{height:100%;border-radius:3px;transition:width 0.5s}
-.badge-popup-box .bp-progress-text{font-size:0.8rem;color:#8a7a6a;margin-bottom:12px}
-.badge-popup-box .bp-close{padding:8px 24px;border-radius:8px;border:1px solid rgba(240,185,11,0.2);background:transparent;color:#a09080;cursor:pointer;font-size:0.9rem}
-.badge-popup-box .bp-close:hover{background:rgba(240,185,11,0.05)}
-/* Celebration confetti */
-.celebration{position:fixed;inset:0;pointer-events:none;z-index:1000;overflow:hidden;contain:strict}
-.celebration-particle{position:absolute;opacity:0;animation:particleFall linear forwards}
-@keyframes particleFall{0%{transform:translateY(-20px) rotate(0deg) scale(0.5);opacity:1}50%{opacity:1}100%{transform:translateY(calc(100vh + 20px)) rotate(720deg) scale(1);opacity:0}}
-/* Badge count in nav */
-.nav-badge-count{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:20px;background:rgba(240,185,11,0.1);border:1px solid rgba(240,185,11,0.15);font-size:0.75rem;color:#f0b90b;cursor:pointer;transition:all 0.2s}
-.nav-badge-count:hover{background:rgba(240,185,11,0.15)}
-.pay-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:999;animation:fadeIn 0.3s}
-.pay-box{background:#2a1a10;border-radius:16px;padding:28px;max-width:360px;width:90%;border:1px solid rgba(240,185,11,0.2);text-align:center}
-.pay-box h3{color:#f0b90b;font-size:1.2rem;margin-bottom:8px}
-.pay-box .pay-price{font-size:2rem;color:#f0b90b;font-weight:800;margin:8px 0}
-.pay-box .pay-desc{color:#a09080;font-size:0.85rem;margin-bottom:16px}
-.pay-box .pay-btn{display:block;width:100%;padding:12px;border-radius:10px;border:none;cursor:pointer;font-size:1rem;font-weight:700;margin-bottom:8px}
-.pay-btn-primary{background:linear-gradient(135deg,#f0b90b,#d4a008);color:#1a0f0a}
-.pay-btn-secondary{background:rgba(100,120,140,0.15);color:#a09080;border:1px solid rgba(100,120,140,0.2)!important}
-.pay-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(240,185,11,0.2)}
-.pay-msg{margin-top:10px;font-size:0.85rem;min-height:20px}
-
-.dc-header{text-align:center;padding:20px}
-.dc-header .dc-date{font-size:0.9rem;color:#a09080;margin-bottom:4px}
-.dc-header .dc-title{font-size:1.3rem;color:#f0b90b;font-weight:700}
-.dc-completed{text-align:center;padding:40px;color:#44cc44;font-size:1.1rem}
-.ai-table{max-width:600px;margin:0 auto}
-.ai-info{display:flex;justify-content:space-between;margin-bottom:12px;font-size:0.85rem;color:#a09080}
-.ai-board{display:flex;justify-content:center;gap:6px;margin:12px 0;min-height:80px;flex-wrap:wrap}
-.ai-hand{text-align:center;margin:8px 0}
-.ai-hand-label{font-size:0.75rem;color:#a09080;margin-bottom:4px}
-.ai-chips{text-align:center;font-size:1.2rem;color:#f0b90b;margin:8px 0}
-.ai-result{text-align:center;padding:12px;border-radius:10px;margin-top:10px;font-size:0.95rem}
-.ai-result.win{background:rgba(68,204,68,0.1);border:1px solid rgba(68,204,68,0.2);color:#44cc44}
-.ai-result.lose{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.2);color:#ff4444}
-.ai-result.draw{background:rgba(240,185,11,0.1);border:1px solid rgba(240,185,11,0.2);color:#f0b90b}
 </style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -298,7 +382,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
         <ellipse cx="100" cy="144" rx="35" ry="10" fill="#c4945a"/>
         <path d="M 80,155 Q 100,175 120,155" stroke="#ff8c42" stroke-width="3" fill="none"/>
       </svg>
-      <div style="font-size:2rem;font-weight:800;color:rgba(240,185,11,0.15);margin:0 4px">VS</div>
+      <div style="font-size:2rem;font-weight:800;color:rgba(184,165,122,0.25);margin:0 4px">VS</div>
       <svg viewBox="0 0 200 200" width="140" height="140">
         <ellipse cx="110" cy="100" rx="60" ry="40" fill="#5a3010"/>
         <circle cx="90" cy="90" r="45" fill="#7a4a1a"/>
@@ -322,13 +406,13 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
       <div class="gc-icon">⚔️</div>
       <h3>翻前斗鸡</h3>
       <p>小鸡 vs 老鹰！面对不同翻前局面，做出正确的选择。</p>
-      <span class="gc-badge badge-free" style="background:#22c55e;color:white">🆓免费</span>
+      <span class="gc-badge badge-free" style="background:var(--jade);color:white">🆓免费</span>
     </div>
     <div class="game-card" onclick="navigate('fish-or-shark')">
       <div class="gc-icon">🐟</div>
       <h3>识鸡辨鸡</h3>
       <p>看打牌风格猜身份——这个玩家是小鸡还是老鹰？</p>
-      <span class="gc-badge badge-free" style="background:#22c55e;color:white">🆓免费</span>
+      <span class="gc-badge badge-free" style="background:var(--jade);color:white">🆓免费</span>
     </div>
     <div class="game-card" onclick="navigate('odds-calc')">
       <div class="gc-icon">🧮</div>
@@ -440,7 +524,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
         <div class="go-stat"><div id="pd-go-streak" class="num">0</div><div class="lbl">连对</div></div>
       </div>
       <div id="pd-revive" style="display:none;margin-bottom:12px">
-        <button class="hero-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 24px rgba(34,197,94,0.3);font-size:1rem;padding:12px 32px" onclick="restoreLives(preflopDuel,'pd')">🎯比欢迎来战</button>
+        <button class="hero-btn" style="background:var(--jade);box-shadow:0 4px 20px rgba(91,140,111,0.25);font-size:1rem;padding:12px 32px" onclick="restoreLives(preflopDuel,'pd')">🎯比欢迎来战</button>
       </div>
       <button id="pd-restart-btn" class="hero-btn" style="font-size:1rem;padding:10px 24px" onclick="preflopDuel.start()">再来一局</button>
       <button class="btn-next" style="margin-top:10px;display:inline-block" onclick="navigate('home')">返回首页</button>
@@ -488,7 +572,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
         <div class="vs-divider">❓</div>
         <div class="character-box">
           <div id="fs-mystery-figure" class="mystery-box">❓</div>
-          <div class="char-name" style="color:#a09080">神秘玩家</div>
+          <div class="char-name" style="color:var(--ink-lighter)">神秘玩家</div>
         </div>
       </div>
       <div class="scenario-box">
@@ -517,7 +601,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
         <div class="go-stat"><div id="fs-go-streak" class="num">0</div><div class="lbl">连对</div></div>
       </div>
       <div id="fs-revive" style="display:none;margin-bottom:12px">
-        <button class="hero-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 24px rgba(34,197,94,0.3);font-size:1rem;padding:12px 32px" onclick="restoreLives(fishOrShark,'fs')">🎯比欢迎来战</button>
+        <button class="hero-btn" style="background:var(--jade);box-shadow:0 4px 20px rgba(91,140,111,0.25);font-size:1rem;padding:12px 32px" onclick="restoreLives(fishOrShark,'fs')">🎯比欢迎来战</button>
       </div>
       <button id="fs-restart-btn" class="hero-btn" style="font-size:1rem;padding:10px 24px" onclick="fishOrShark.start()">再来一局</button>
       <button class="btn-next" style="margin-top:10px;display:inline-block" onclick="navigate('home')">返回首页</button>
@@ -608,7 +692,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
         <div class="go-stat"><div id="oc-go-streak" class="num">0</div><div class="lbl">连对</div></div>
       </div>
       <div id="oc-revive" style="display:none;margin-bottom:12px">
-        <button class="hero-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 24px rgba(34,197,94,0.3);font-size:1rem;padding:12px 32px" onclick="showReviveDialog(oddsCalc,'oc')">🎯比欢迎来战</button>
+        <button class="hero-btn" style="background:var(--jade);box-shadow:0 4px 20px rgba(91,140,111,0.25);font-size:1rem;padding:12px 32px" onclick="showReviveDialog(oddsCalc,'oc')">🎯比欢迎来战</button>
       </div>
       <button id="oc-restart-btn" class="hero-btn" style="font-size:1rem;padding:10px 24px" onclick="oddsCalc.start()">再来一局</button>
       <button class="btn-next" style="margin-top:10px;display:inline-block" onclick="navigate('home')">返回首页</button>
@@ -696,7 +780,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
         <div class="go-stat"><div id="mr-go-streak" class="num">0</div><div class="lbl">连对</div></div>
       </div>
       <div id="mr-revive" style="display:none;margin-bottom:12px">
-        <button class="hero-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 24px rgba(34,197,94,0.3);font-size:1rem;padding:12px 32px" onclick="showReviveDialog(mindRead,'mr')">🎯比欢迎来战</button>
+        <button class="hero-btn" style="background:var(--jade);box-shadow:0 4px 20px rgba(91,140,111,0.25);font-size:1rem;padding:12px 32px" onclick="showReviveDialog(mindRead,'mr')">🎯比欢迎来战</button>
       </div>
       <button id="mr-restart-btn" class="hero-btn" style="font-size:1rem;padding:10px 24px" onclick="mindRead.start()">再来一局</button>
       <button class="btn-next" style="margin-top:10px;display:inline-block" onclick="navigate('home')">返回首页</button>
@@ -757,7 +841,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
       <div class="table-felt">
         <div class="round-label">你的手牌<span id="ap-blind-label"> · 盲注:10/20</span></div>
         <div id="ap-cards" class="hand-cards"></div>
-        <div style="font-size:0.85rem;color:#a09080;margin-top:4px">
+        <div style="font-size:0.85rem;color:var(--ink-lighter);margin-top:4px">
           <span id="ap-stack-display"></span> · <span id="ap-pos-display"></span>
         </div>
       </div>
@@ -787,7 +871,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
         <div class="go-stat"><div id="ap-go-streak" class="num">0</div><div class="lbl">连对</div></div>
       </div>
       <div id="ap-revive" style="display:none;margin-bottom:12px">
-        <button class="hero-btn" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 4px 24px rgba(34,197,94,0.3);font-size:1rem;padding:12px 32px" onclick="showReviveDialog(allinPush,'ap')">🎯比欢迎来战</button>
+        <button class="hero-btn" style="background:var(--jade);box-shadow:0 4px 20px rgba(91,140,111,0.25);font-size:1rem;padding:12px 32px" onclick="showReviveDialog(allinPush,'ap')">🎯比欢迎来战</button>
       </div>
       <button id="ap-restart-btn" class="hero-btn" style="font-size:1rem;padding:10px 24px" onclick="allinPush.start()">再来一局</button>
       <button class="btn-next" style="margin-top:10px;display:inline-block" onclick="navigate('home')">返回首页</button>
@@ -820,12 +904,12 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
       </div>
       <div class="ai-info">
         <span>🤖 AI筹码: <strong id="ai-ai-chips">1000</strong></span>
-        <span id="ai-position-label" style="color:#f0b90b;font-weight:600"></span>
+        <span id="ai-position-label" style="color:var(--vermillion);font-weight:600"></span>
         <span>🧑 你的筹码: <strong id="ai-my-chips">1000</strong></span>
       </div>
       <div class="ai-info" style="justify-content:center;gap:20px">
         <span>底池: <strong id="ai-pot">0</strong></span>
-        <span id="ai-stage-label" style="color:#ff8c42"></span>
+        <span id="ai-stage-label" style="color:var(--vermillion)"></span>
         <span>下注: <strong id="ai-bet-display">0</strong></span>
       </div>
       <div style="text-align:center;margin-bottom:8px">
@@ -877,7 +961,7 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
   <div class="dc-header">
     <div class="dc-date" id="dc-date"></div>
     <div class="dc-title">🐤 每日挑战</div>
-    <p style="color:#a09080;font-size:0.9rem;margin-top:8px">每天一道扑克挑战，完成获得双倍积分！</p>
+    <p style="color:var(--ink-lighter);font-size:0.9rem;margin-top:8px">每天一道扑克挑战，完成获得双倍积分！</p>
   </div>
   <div id="dc-content" style="padding:0 16px"></div>
 </div>
@@ -890,8 +974,8 @@ a{color:#f0b90b;text-decoration:none}a:hover{color:#ffd700}
   </div>
   <div style="text-align:center;margin-bottom:20px">
     <div style="font-size:3rem" id="ach-total-rank">🐤</div>
-    <div style="font-size:1.3rem;color:#f0b90b;font-weight:700" id="ach-total-title">小鸡</div>
-    <div style="font-size:0.9rem;color:#a09080" id="ach-total-score">总得分: 0</div>
+    <div style="font-size:1.3rem;color:var(--vermillion);font-weight:700" id="ach-total-title">小鸡</div>
+    <div style="font-size:0.9rem;color:var(--ink-lighter)" id="ach-total-score">总得分: 0</div>
   </div>
   <div id="ach-grid" class="ach-grid"></div>
 </div>
@@ -955,7 +1039,7 @@ function showReviveDialog(game,prefix){
   }
   const overlay=document.createElement('div');
   overlay.className='pay-overlay';
-  overlay.innerHTML='<div class="pay-box"><div style="font-size:2.5rem;margin-bottom:8px">🔓</div><h3>永久解锁</h3><div class="pay-desc" style="margin-bottom:16px">通过平台下单购买后，联系卖家获取兑换码<br>输入兑换码即可永久解锁全部游戏！</div><div id="pay-redeem"><input type="text" id="code-input" placeholder="输入兑换码" style="width:100%;padding:12px;border-radius:8px;border:1px solid rgba(240,185,11,0.2);background:rgba(0,0,0,0.3);color:#e8d5c4;font-size:1rem;text-align:center;outline:none;box-sizing:border-box;margin-bottom:8px"><button class="pay-btn pay-btn-primary" onclick="redeemCode(document.getElementById(\'code-input\').value.trim())">🚀 立即解锁</button></div><button class="pay-btn pay-btn-secondary" onclick="this.closest(\'.pay-overlay\').remove()">取消</button><div class="pay-msg" id="pay-msg"></div></div>'
+  overlay.innerHTML='<div class="pay-box"><div style="font-size:2.5rem;margin-bottom:8px">🔓</div><h3>永久解锁</h3><div class="pay-desc" style="margin-bottom:16px">通过平台下单购买后，联系卖家获取兑换码<br>输入兑换码即可永久解锁全部游戏！</div><div id="pay-redeem"><input type="text" id="code-input" placeholder="输入兑换码" style="width:100%;padding:12px;border-radius:8px;border:1px solid rgba(184,165,122,0.2);background:var(--paper-dark);color:var(--ink);font-size:1rem;text-align:center;outline:none;box-sizing:border-box;margin-bottom:8px"><button class="pay-btn pay-btn-primary" onclick="redeemCode(document.getElementById(\'code-input\').value.trim())">🚀 立即解锁</button></div><button class="pay-btn pay-btn-secondary" onclick="this.closest(\'.pay-overlay\').remove()">取消</button><div class="pay-msg" id="pay-msg"></div></div>'
   document.body.appendChild(overlay);
 }
 
@@ -1038,29 +1122,29 @@ function shareScore(gameName,score,rank,icon,detail){
   const x=c.getContext('2d');
   // Dark background with gradient
   const g=x.createLinearGradient(0,0,600,380);
-  g.addColorStop(0,'#1a0f0a');g.addColorStop(1,'#0d0805');
+  g.addColorStop(0,'#faf7f2');g.addColorStop(1,'#f0ebe0');
   x.fillStyle=g;x.fillRect(0,0,600,380);
   // Decorative border
-  x.strokeStyle='#f0b90b';x.lineWidth=2;x.strokeRect(10,10,580,360);
+  x.strokeStyle='#b8a57a';x.lineWidth=2;x.strokeRect(10,10,580,360);
   // Title
-  x.fillStyle='#f0b90b';x.font='bold 32px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='#c43a31';x.font='bold 32px "PingFang SC","Microsoft YaHei",sans-serif';
   x.textAlign='center';x.fillText('🐤 德州扒鸡',300,55);
   // Game name
-  x.fillStyle='#e8d5c4';x.font='20px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='#5c5240';x.font='20px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText(gameName,300,95);
   // Score
-  x.fillStyle='#f0b90b';x.font='bold 56px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='#c43a31';x.font='bold 56px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText(String(score),300,165);
-  x.fillStyle='#a09080';x.font='14px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='var(--ink-lighter)';x.font='14px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText('得分',300,190);
   // Rank
   x.font='40px sans-serif';x.fillText(icon,300,250);
-  x.fillStyle='#a09080';x.font='16px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='var(--ink-lighter)';x.font='16px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText(rank,300,285);
   // Detail
   if(detail){x.fillStyle='#6a8a9a';x.font='14px sans-serif';x.fillText(detail,300,320);}
   // Footer
-  x.fillStyle='rgba(240,185,11,0.4)';x.font='13px sans-serif';
+  x.fillStyle='rgba(184,165,122,0.4)';x.font='13px sans-serif';
   x.fillText('扫码挑战德州扒鸡 → baiyunzhi.github.io/poker-ocean/chicken/',300,360);
   // Show in overlay
   const dataUrl=c.toDataURL('image/png');
@@ -1092,18 +1176,18 @@ function showInviteDialog(fromGame){
   const link=getInviteLink();
   let actions='';
   if(fromGame||!isUnlocked()){
-    actions='<div class="iv-actions"><button class="iv-action-btn" style="background:#f0b90b;color:#1a0f0a" onclick="copyInviteLink(this)">📋 复制邀请链接</button><button class="iv-action-btn" style="background:rgba(68,204,68,0.2);color:#44cc44" onclick="shareInvite(this)">📱 分享好友</button><button class="iv-action-btn" style="background:rgba(255,68,68,0.15);color:#ff6666" onclick="generateInvitePoster(this)">🖼️ 生成海报</button></div>';
+    actions='<div class="iv-actions"><button class="iv-action-btn" style="background:var(--gold);color:var(--ink)" onclick="copyInviteLink(this)">📋 复制邀请链接</button><button class="iv-action-btn" style="background:rgba(91,140,111,0.15);color:var(--jade-dark)" onclick="shareInvite(this)">📱 分享好友</button><button class="iv-action-btn" style="background:rgba(196,58,49,0.12);color:var(--vermillion-light)" onclick="generateInvitePoster(this)">🖼️ 生成海报</button></div>';
   }else{
-    actions='<div class="iv-actions"><button class="iv-action-btn" style="background:#f0b90b;color:#1a0f0a" onclick="copyInviteLink(this)">📋 复制邀请链接</button><button class="iv-action-btn" style="background:rgba(68,204,68,0.2);color:#44cc44" onclick="shareInvite(this)">📱 分享给好友</button><button class="iv-action-btn" style="background:rgba(255,68,68,0.15);color:#ff6666" onclick="generateInvitePoster(this)">🖼️ 邀请海报</button></div>';
+    actions='<div class="iv-actions"><button class="iv-action-btn" style="background:var(--gold);color:var(--ink)" onclick="copyInviteLink(this)">📋 复制邀请链接</button><button class="iv-action-btn" style="background:rgba(91,140,111,0.15);color:var(--jade-dark)" onclick="shareInvite(this)">📱 分享给好友</button><button class="iv-action-btn" style="background:rgba(196,58,49,0.12);color:var(--vermillion-light)" onclick="generateInvitePoster(this)">🖼️ 邀请海报</button></div>';
   }
-  ov.innerHTML='<div class="invite-box"><div class="iv-title">👥 邀请好友，免费解锁</div><div class="iv-desc">邀请 <strong style="color:#f0b90b">3</strong> 位好友打开链接，全部游戏免费玩！</div>'+
+  ov.innerHTML='<div class="invite-box"><div class="iv-title">👥 邀请好友，免费解锁</div><div class="iv-desc">邀请 <strong style="color:var(--vermillion)">3</strong> 位好友打开链接，全部游戏免费玩！</div>'+
     '<div class="iv-code" onclick="copyInviteCode(this)">'+getInviteCode()+'</div><div class="iv-desc" style="font-size:0.7rem;margin-top:-6px">👆 点击邀请码复制</div>'+
     '<div class="iv-link" onclick="copyFullLink(this)" title="点击复制完整链接">🔗 '+link+'</div>'+
     '<div class="iv-pb"><div class="iv-pb-fill" style="width:'+pct+'%"></div></div>'+
     '<div class="iv-progress">已邀请 <strong>'+cnt+'</strong> / 3 人'+(cnt>=3?' 🎉':'')+'</div>'+
     actions+
     '<div id="iv-poster-area" style="margin:0"></div>'+
-    '<hr style="border-color:rgba(240,185,11,0.1);margin:12px 0">'+
+    '<hr style="border-color:rgba(184,165,122,0.1);margin:12px 0">'+
     '<div class="iv-desc" style="font-size:0.8rem;color:#8a7a6a">好友给了你邀请码？在这里输入：</div>'+
     '<div class="iv-input-row"><input type="text" id="invite-input" placeholder="输入好友的6位邀请码" maxlength="10"><button onclick="applyInviteCode(document.getElementById(\'invite-input\').value)">确认</button></div>'+
     '<div id="iv-confirm-msg" class="iv-confirm-msg"></div>'+
@@ -1138,20 +1222,20 @@ function generateInvitePoster(btn){
   const x=c.getContext('2d');
   // Background
   const g=x.createLinearGradient(0,0,400,560);
-  g.addColorStop(0,'#1a0f0a');g.addColorStop(0.5,'#2a1a10');g.addColorStop(1,'#0d0805');
+  g.addColorStop(0,'#faf7f2');g.addColorStop(0.5,'#f0ebe0');g.addColorStop(1,'#e8e0d0');
   x.fillStyle=g;x.fillRect(0,0,400,560);
   // Gold border
-  x.strokeStyle='#f0b90b';x.lineWidth=3;x.strokeRect(12,12,376,536);
+  x.strokeStyle='var(--gold)';x.lineWidth=3;x.strokeRect(12,12,376,536);
   // Inner border
-  x.strokeStyle='rgba(240,185,11,0.2)';x.lineWidth=1;x.strokeRect(20,20,360,520);
+  x.strokeStyle='rgba(184,165,122,0.2)';x.lineWidth=1;x.strokeRect(20,20,360,520);
   // Title
-  x.fillStyle='#f0b90b';x.font='bold 36px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='#c43a31';x.font='bold 36px "PingFang SC","Microsoft YaHei",sans-serif';
   x.textAlign='center';x.fillText('🐤 德州扒鸡',200,70);
   // Subtitle
   x.fillStyle='#e8d5c4';x.font='16px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText('扑克学习 · 从小鸡到金鹏',200,100);
   // Divider
-  x.strokeStyle='rgba(240,185,11,0.15)';x.lineWidth=1;
+  x.strokeStyle='rgba(184,165,122,0.15)';x.lineWidth=1;
   x.beginPath();x.moveTo(60,120);x.lineTo(340,120);x.stroke();
   // Chicken SVG simplified
   x.fillStyle='#d4a574';x.beginPath();x.arc(200,200,50,0,Math.PI*2);x.fill();
@@ -1161,25 +1245,25 @@ function generateInvitePoster(btn){
   x.fillStyle='#222';x.beginPath();x.arc(186,190,2.5,0,Math.PI*2);x.fill();x.beginPath();x.arc(214,190,2.5,0,Math.PI*2);x.fill();
   x.fillStyle='#ff8c42';x.beginPath();x.moveTo(175,210);x.lineTo(200,222);x.lineTo(225,210);x.lineTo(216,216);x.lineTo(200,224);x.lineTo(184,216);x.closePath();x.fill();
   // Invite code label
-  x.fillStyle='#a09080';x.font='14px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('我的邀请码',200,280);
+  x.fillStyle='var(--ink-lighter)';x.font='14px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('我的邀请码',200,280);
   // Invite code big
-  x.fillStyle='#f0b90b';x.font='bold 48px monospace';x.fillText(code,200,335);
+  x.fillStyle='#c43a31';x.font='bold 48px monospace';x.fillText(code,200,335);
   // Progress text
   const cnt=getReferralCount();
-  x.fillStyle='#a09080';x.font='16px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='var(--ink-lighter)';x.font='16px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText('已邀请 '+cnt+' / 3 人',200,380);
   // Link
   x.fillStyle='#6a8a9a';x.font='10px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText('扫码或浏览器打开:',200,420);
   x.fillStyle='#8ac4d8';x.font='12px "PingFang SC","Microsoft YaHei",sans-serif';x.fillText(link,200,440);
   // Instruction
-  x.fillStyle='rgba(240,185,11,0.3)';x.font='13px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='rgba(184,165,122,0.3)';x.font='13px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText('← 好友打开链接或输入此码 →',200,480);
   // Footer
-  x.fillStyle='rgba(240,185,11,0.15)';x.font='11px "PingFang SC","Microsoft YaHei",sans-serif';
+  x.fillStyle='rgba(184,165,122,0.15)';x.font='11px "PingFang SC","Microsoft YaHei",sans-serif';
   x.fillText('baiyunzhi.github.io/poker-ocean/chicken/',200,530);
   // Click to save
   const box=document.createElement('div');box.className='iv-poster-box';
-  box.innerHTML='<p style="font-size:0.75rem;color:#a09080;margin-bottom:6px">👆 点击图片保存分享</p>';
+  box.innerHTML='<p style="font-size:0.75rem;color:var(--ink-lighter);margin-bottom:6px">👆 点击图片保存分享</p>';
   const img=document.createElement('img');img.style.cssText='width:100%;max-width:280px;border-radius:8px;cursor:pointer';
   img.src=c.toDataURL('image/png');
   img.onclick=function(){c.toBlob(function(b){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='德州扒鸡_邀请码_'+code+'.png';a.click();},'image/png');};
@@ -1215,7 +1299,7 @@ function applyInviteCode(code){
       r.push(ref);localStorage.setItem('poker_referrals',JSON.stringify(r));
       // Show a welcome toast
       setTimeout(function(){
-        const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a2a0a;color:#44cc44;padding:12px 24px;border-radius:12px;border:1px solid rgba(68,204,68,0.3);z-index:999;font-size:0.9rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.5);animation:fadeIn 0.3s';
+        const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a2a0a;color:var(--jade-dark);padding:12px 24px;border-radius:12px;border:1px solid rgba(68,204,68,0.3);z-index:999;font-size:0.9rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.5);animation:fadeIn 0.3s';
         t.textContent='🐤 感谢好友的邀请！已为你记录';
         document.body.appendChild(t);
         setTimeout(function(){t.style.transition='opacity 0.3s';t.style.opacity='0';setTimeout(function(){t.remove()},300);},3000);
@@ -1257,7 +1341,7 @@ function unlockBadge(id){
   u.push(id);localStorage.setItem('poker_badges',JSON.stringify(u));
   // Celebration — confetti burst
   (function(){const d=document.createElement('div');d.className='celebration';d.style.cssText='contain:strict;will-change:transform';
-    const colors=['#f0b90b','#ff4444','#44cc44','#4488ff','#ff88cc'];
+    const colors=['var(--gold)','#ff4444','#44cc44','#4488ff','#ff88cc'];
     for(let i=0;i<20;i++){
       const p=document.createElement('div');p.className='celebration-particle';
       const size=5+Math.random()*6;
@@ -1268,8 +1352,8 @@ function unlockBadge(id){
   })();
   // Show notification
   const b=BADGES.find(x=>x.id===id);if(!b)return;
-  const n=document.createElement('div');n.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#2a1a10,#3a2210);border:2px solid #f0b90b;border-radius:16px;padding:28px;z-index:1001;text-align:center;animation:fadeIn 0.3s;box-shadow:0 0 60px rgba(240,185,11,0.15);min-width:280px';
-  n.innerHTML='<div style="font-size:3.5rem;margin-bottom:8px">'+b.icon+'</div><div style="color:#f0b90b;font-weight:700;font-size:1.3rem;margin-bottom:4px">🏅 成就解锁！</div><div style="color:#e8d5c4;font-size:1.1rem;margin-bottom:6px;font-weight:600">'+b.name+'</div><div style="color:#a09080;font-size:0.8rem;margin-bottom:16px">'+b.desc+'</div><button onclick="this.parentElement.remove();updateBadgeCount()" style="padding:10px 32px;border-radius:8px;border:none;background:linear-gradient(135deg,#f0b90b,#d4a008);color:#1a0f0a;font-weight:700;cursor:pointer;font-size:0.95rem">太棒了！</button>';
+  const n=document.createElement('div');n.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--paper);border:2px solid var(--gold);border-radius:16px;padding:28px;z-index:1001;text-align:center;animation:fadeIn 0.3s;box-shadow:0 0 20px 40px rgba(44,36,22,0.12);min-width:280px';
+  n.innerHTML='<div style="font-size:3.5rem;margin-bottom:8px">'+b.icon+'</div><div style="color:var(--vermillion);font-weight:700;font-size:1.3rem;margin-bottom:4px">🏅 成就解锁！</div><div style="color:var(--ink);font-size:1.1rem;margin-bottom:6px;font-weight:600">'+b.name+'</div><div style="color:var(--ink-lighter);font-size:0.8rem;margin-bottom:16px">'+b.desc+'</div><button onclick="this.parentElement.remove();updateBadgeCount()" style="padding:10px 32px;border-radius:8px;border:none;background:var(--vermillion);color:#fff;font-weight:700;cursor:pointer;font-size:0.95rem">太棒了！</button>';
   document.body.appendChild(n);
   n.querySelector('button').onclick=function(){n.remove();updateBadgeCount();};
   updateBadgeCount();
@@ -1282,7 +1366,7 @@ function showBadgeDetail(id){
   const pct=Math.min(100,p.cur/p.tar*100);
   const ov=document.createElement('div');ov.className='badge-popup';
   ov.innerHTML='<div class="badge-popup-box"><div class="bp-icon">'+(unlocked?b.icon:'🔒')+'</div><div class="bp-name">'+(unlocked?b.name:'???')+'</div><div class="bp-desc">'+b.desc+'</div>'+
-    '<div class="bp-bar"><div class="bp-bar-fill" style="width:'+pct+'%;background:'+(unlocked?'linear-gradient(90deg,#44cc44,#66ee66)':'linear-gradient(90deg,#f0b90b,#ffd700)')+'"></div></div>'+
+    '<div class="bp-bar"><div class="bp-bar-fill" style="width:'+pct+'%;background:'+(unlocked?'linear-gradient(90deg,#44cc44,#66ee66)':'linear-gradient(90deg,var(--gold),#ffd700)')+'"></div></div>'+
     '<div class="bp-progress-text">'+(unlocked?'✅ 已解锁！':(p.cur+' / '+p.tar))+'</div>'+
     '<button class="bp-close" onclick="this.closest(\'.badge-popup\').remove()">关闭</button></div>';
   document.body.appendChild(ov);
@@ -1666,7 +1750,7 @@ const fishOrShark={
         let ug=document.getElementById('fs-unlock-guide');
         if(!ug){
           ug=document.createElement('div');ug.id='fs-unlock-guide';ug.className='unlock-guide';
-          ug.innerHTML='<div class="ug-title">🎯 欢迎来战！</div><div class="ug-desc">想挑战 🧮赔率速算 👀读心术 🧨全压赌命 🤖AI对战 吗？</div><button class="ug-btn ug-btn-invite" onclick="showInviteDialog()">👥 邀请3位好友免费解锁</button><button class="ug-btn ug-btn-primary" onclick="(function(){var o=document.createElement(\'div\');o.className=\'pay-overlay\';o.innerHTML=\'<div class=\\\"pay-box\\\"><div style=\\\"font-size:2.5rem;margin-bottom:8px\\\">🔓</div><h3>永久解锁</h3><div class=\\\"pay-desc\\\">29.9元永久解锁全部游戏+AI对战！联系卖家获取兑换码</div><div id=\\\"pay-redeem\\\"><input type=\\\"text\\\" id=\\\"code-input\\\" placeholder=\\\"输入兑换码\\\" style=\\\"width:100%;padding:12px;border-radius:8px;border:1px solid rgba(240,185,11,0.2);background:rgba(0,0,0,0.3);color:#e8d5c4;font-size:1rem;text-align:center;outline:none;box-sizing:border-box;margin-bottom:8px\\\"><button class=\\\"pay-btn pay-btn-primary\\\" onclick=\\\"redeemCode(document.getElementById(\'code-input\').value.trim())\\\">🚀 立即解锁</button></div><button class=\\\"pay-btn pay-btn-secondary\\\" onclick=\\\"this.closest(\'.pay-overlay\').remove()\\\">取消</button><div class=\\\"pay-msg\\\" id=\\\"pay-msg\\\"></div></div>\';document.body.appendChild(o)})()">🔥 立即解锁全部游戏</button>';
+          ug.innerHTML='<div class="ug-title">🎯 欢迎来战！</div><div class="ug-desc">想挑战 🧮赔率速算 👀读心术 🧨全压赌命 🤖AI对战 吗？</div><button class="ug-btn ug-btn-invite" onclick="showInviteDialog()">👥 邀请3位好友免费解锁</button><button class="ug-btn ug-btn-primary" onclick="(function(){var o=document.createElement(\'div\');o.className=\'pay-overlay\';o.innerHTML=\'<div class=\\\"pay-box\\\"><div style=\\\"font-size:2.5rem;margin-bottom:8px\\\">🔓</div><h3>永久解锁</h3><div class=\\\"pay-desc\\\">29.9元永久解锁全部游戏+AI对战！联系卖家获取兑换码</div><div id=\\\"pay-redeem\\\"><input type=\\\"text\\\" id=\\\"code-input\\\" placeholder=\\\"输入兑换码\\\" style=\\\"width:100%;padding:12px;border-radius:8px;border:1px solid rgba(184,165,122,0.2);background:var(--paper-dark);color:var(--ink);font-size:1rem;text-align:center;outline:none;box-sizing:border-box;margin-bottom:8px\\\"><button class=\\\"pay-btn pay-btn-primary\\\" onclick=\\\"redeemCode(document.getElementById(\'code-input\').value.trim())\\\">🚀 立即解锁</button></div><button class=\\\"pay-btn pay-btn-secondary\\\" onclick=\\\"this.closest(\'.pay-overlay\').remove()\\\">取消</button><div class=\\\"pay-msg\\\" id=\\\"pay-msg\\\"></div></div>\';document.body.appendChild(o)})()">🔥 立即解锁全部游戏</button>';
           document.querySelector('#fs-gameover .game-area').appendChild(ug);
         }
         ug.classList.add('show');
@@ -2344,14 +2428,14 @@ function renderDaily(){
   const today=new Date().toISOString().slice(0,10);
   document.getElementById('dc-date').textContent=today+' 🐤 每日挑战';
   if(localStorage.getItem('poker_daily_date')===today){
-    document.getElementById('dc-content').innerHTML='<div class="dc-completed">✅ 今日挑战已完成！<br><span style="font-size:0.85rem;color:#a09080">明天再来吧</span></div>';
+    document.getElementById('dc-content').innerHTML='<div class="dc-completed">✅ 今日挑战已完成！<br><span style="font-size:0.85rem;color:var(--ink-lighter)">明天再来吧</span></div>';
     return;
   }
   const seed=today.split('-').reduce((a,b)=>a+parseInt(b),0);
   const games=[{name:'翻前斗鸡',id:'pd',page:'preflop-duel'},{name:'识鸡辨鸡',id:'fs',page:'fish-or-shark'},{name:'赔率速算',id:'oc',page:'odds-calc'},{name:'读心术',id:'mr',page:'mind-read'},{name:'全压赌命',id:'ap',page:'allin-push'}];
   const gi=Math.floor((seed*9301+49297)%233280/games.length%games.length);
   const g=games[gi];
-  document.getElementById('dc-content').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:3rem;margin-bottom:12px">🌟</div><h3 style="color:#f0b90b;margin-bottom:8px">今日挑战：'+g.name+'</h3><p style="color:#a09080;margin-bottom:16px">完成可获得<span style="color:#f0b90b;font-weight:700">双倍积分</span>！</p><button class="hero-btn" onclick="localStorage.setItem(\'poker_daily_date\',new Date().toISOString().slice(0,10));localStorage.removeItem(\'poker_daily_counted\');navigate(\''+g.page+'\');setTimeout(()=>window[\''+g.id+'_start\'](),100)">开始今日挑战</button></div>';
+  document.getElementById('dc-content').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:3rem;margin-bottom:12px">🌟</div><h3 style="color:var(--vermillion);margin-bottom:8px">今日挑战：'+g.name+'</h3><p style="color:var(--ink-lighter);margin-bottom:16px">完成可获得<span style="color:var(--vermillion);font-weight:700">双倍积分</span>！</p><button class="hero-btn" onclick="localStorage.setItem(\'poker_daily_date\',new Date().toISOString().slice(0,10));localStorage.removeItem(\'poker_daily_counted\');navigate(\''+g.page+'\');setTimeout(()=>window[\''+g.id+'_start\'](),100)">开始今日挑战</button></div>';
   window[g.id+'_start']=function(){const map={pd:preflopDuel,fs:fishOrShark,oc:oddsCalc,mr:mindRead,ap:allinPush};map[g.id].start();};
 }
 
@@ -2375,10 +2459,10 @@ function renderAchievements(){
   const ub=getUnlockedBadges();const stats=collectBadgeStats();
   const unlockedCnt=ub.length;const totalCnt=BADGES.length;
   let bh='<div style="display:flex;justify-content:space-between;align-items:center;margin:24px 0 6px">'+
-    '<h3 style="color:#f0b90b;font-size:1.1rem">🏅 徽章 <span style="color:#a09080;font-size:0.8rem">'+unlockedCnt+'/'+totalCnt+'</span></h3>'+
-    '<span style="font-size:0.75rem;color:#a09080">'+(totalCnt-unlockedCnt)+'枚待解锁</span></div>'+
+    '<h3 style="color:var(--vermillion);font-size:1.1rem">🏅 徽章 <span style="color:var(--ink-lighter);font-size:0.8rem">'+unlockedCnt+'/'+totalCnt+'</span></h3>'+
+    '<span style="font-size:0.75rem;color:var(--ink-lighter)">'+(totalCnt-unlockedCnt)+'枚待解锁</span></div>'+
     '<div style="width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:12px;overflow:hidden">'+
-    '<div style="height:100%;background:linear-gradient(90deg,#f0b90b,#ffd700);border-radius:2px;transition:width 0.5s;width:'+(unlockedCnt/totalCnt*100)+'%"></div></div>'+
+    '<div style="height:100%;background:linear-gradient(90deg,var(--gold),#ffd700);border-radius:2px;transition:width 0.5s;width:'+(unlockedCnt/totalCnt*100)+'%"></div></div>'+
     '<div class="badge-grid">';
   for(const b of BADGES){
     const unlocked=ub.includes(b.id);
@@ -2436,5 +2520,11 @@ function updateBadgeCount(){
   navigate('home');
   updateBadgeCount();
 </script>
+
+<div class="footer">
+  <div class="seal">牌室</div>
+  <p>小院 · 棋牌室  ·  从小鸡到金鹏的扑克之旅 🐤 → 🦅</p>
+</div>
+
 </body>
 </html>
