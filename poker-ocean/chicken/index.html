@@ -114,6 +114,12 @@ body::before {
   letter-spacing:0.2em;
   margin-top:4px;
 }
+.logo-tagline{
+  font-size:0.72rem;
+  color:var(--ink-lighter);
+  margin-top:6px;
+  letter-spacing:0.06em;
+}
 .lang-btn{
   position:absolute;
   top:20px;right:16px;
@@ -578,9 +584,8 @@ body::before {
   width:28px;height:28px;border-radius:50%;
   border:2px solid rgba(184,165,122,0.2);
   display:flex;align-items:center;justify-content:center;
-  font-size:0.9rem;background:var(--cream);
+  font-size:0.85rem;background:var(--cream);
   transition:all var(--transition);
-  font-size:0.65rem;
   color:var(--ink-light);
 }
 .journey-step.done{background:var(--jade-pale);border-color:var(--jade);color:var(--jade-dark);}
@@ -661,7 +666,8 @@ body::before {
 <body>
 
 <div class="header">
-  <div class="logo">德州扑克<span class="logo-sub">POKER ACADEMY</span></div>
+  <div class="logo">🐤 德州扒鸡<span class="logo-sub">POKER ACADEMY</span></div>
+  <div class="logo-tagline">从小鸡到金鹏的成长之旅 🐤 → 🦅</div>
   <button class="lang-btn" id="lang-btn" data-lang="en">EN</button>
 </div>
 
@@ -675,13 +681,13 @@ body::before {
 <!-- Battle Tab -->
 <div id="tab-battle" class="tab-content active">
   <div class="progress-journey">
-    <div class="journey-step active">雏</div>
+    <div class="journey-step active">🐤</div>
     <div class="journey-line"></div>
-    <div class="journey-step">学</div>
+    <div class="journey-step">🐔</div>
     <div class="journey-line"></div>
-    <div class="journey-step">鹰</div>
+    <div class="journey-step">🦉</div>
     <div class="journey-line"></div>
-    <div class="journey-step">鹏</div>
+    <div class="journey-step">🦅</div>
   </div>
   <div class="petals" id="petals-poker"></div>
   <div class="table-wrap">
@@ -787,7 +793,7 @@ body::before {
 
 <div class="footer">
   <div class="seal">牌室</div>
-  <p>小院 · 棋牌室</p>
+  <p>从小鸡到金鹏的德州扑克成长之旅 🐤 → 🦅</p>
 </div>
 
 <script>
